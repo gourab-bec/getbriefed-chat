@@ -385,8 +385,8 @@ async function submitGate() {
   const errEl   = document.getElementById('gate-error');
   const btn     = document.getElementById('gate-btn');
 
-  if (!name || !email || !email.includes('@')) {
-    errEl.textContent = 'Please enter your name and a valid email address.';
+  if (!name || !email || !email.includes('@') || !company) {
+    errEl.textContent = 'Please enter your name, a valid email address, and your company.';
     errEl.classList.add('visible');
     return;
   }
