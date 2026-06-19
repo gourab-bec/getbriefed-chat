@@ -1,0 +1,6 @@
+# Real career profile — keep local-only, never publish to the public site
+resume/PROFILE.md
+
+# Python
+__pycache__/
+*.pyc

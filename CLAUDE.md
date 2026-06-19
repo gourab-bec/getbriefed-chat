@@ -107,6 +107,32 @@ python3 -m http.server 8000   # then visit http://localhost:8000
 Note the app will call the live backend at `agent-gourab-api.onrender.com`.
 To test against a local backend, change the `API` constant in `index.html`.
 
+## Resume toolkit (`resume/`)
+
+A self-contained, dependency-free Python toolkit (independent of the website —
+nothing here is served) that turns a structured career profile + a job
+description into two tailored resume variants. See `resume/README.md` and
+`resume/GENERATION_GUIDE.md`.
+
+- `resume/lib/profile.py` — pure functions: `parse_profile`, `validate_profile`,
+  `extract_jd_keywords`, `coverage_score`, `build_resume`.
+- `resume/generate.py` — CLI: `validate` and `build --jd <file> --variant both`.
+- `resume/PROFILE.template.md` — structured template to copy.
+- `resume/profile.example.md` — **synthetic** test fixture (no real data).
+- `resume/tests/test_profile.py` — TDD suite (`python3 -m unittest discover -s resume/tests -v`).
+
+Conventions:
+- **Source of truth** for real career facts is `resume/PROFILE.md` — **git-ignored,
+  local-only** (never publish personal data to the public site). The
+  authoritative origin is the Agent Gourab knowledge base in Supabase
+  (`agent-gourab-api` / `agent-gourab-console`); populate `PROFILE.md` from it
+  once that repo is added to the session.
+- **Never fabricate** resume facts — titles, dates, deals, and metrics must come
+  from the profile. Omit unsupported JD requirements; surface the gap instead.
+- Keep the experience-header format the parser expects:
+  `### <Title> — <Employer> (<start>–<end>) | <Location>`.
+- Run the test suite after changing `lib/profile.py`.
+
 ## Git workflow
 
 - Active development branch: **`claude/claude-md-docs-4vzjs2`**.
