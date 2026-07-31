@@ -216,6 +216,27 @@ ordersRouter.post('/:id/cancel', requireAuth(), async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// --- Tips (100% to runner; counted toward the Prop 22 floor, so must be recorded) ---
+
+ordersRouter.post('/:id/tip', requireAuth('buyer'), (req, res) => {
+  const order = db.orders.get(req.params.id);
+  if (!order) return res.status(404).json({ error: 'order not found' });
+  if (order.buyerId !== req.user.sub) return res.status(403).json({ error: 'forbidden' });
+  if (!['delivered', 'completed'].includes(order.status)) {
+    return res.status(409).json({ error: 'tip after delivery' });
+  }
+  const { tipCents } = req.body ?? {};
+  if (!Number.isInteger(tipCents) || tipCents <= 0 || tipCents > 10000) {
+    return res.status(400).json({ error: 'tipCents must be 1–10000' });
+  }
+  if (order.tipsCents) return res.status(409).json({ error: 'tip already recorded' });
+  // Charged as a separate PaymentIntent with 100% transfer to runner in live mode;
+  // no platform fee on tips, ever.
+  order.tipsCents = tipCents;
+  emitToOrder(order.id, 'order:tip', { orderId: order.id, tipCents });
+  res.json({ ok: true, tipCents });
+});
+
 // --- Ratings ---
 
 ordersRouter.post('/:id/rating', requireAuth(), (req, res) => {

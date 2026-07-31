@@ -37,3 +37,12 @@ authorization, and the final go-live call.
 | Chase/SBA business plan ($50k ask, honest underwriting notes) | ✅ docs/finance/business-plan-chase.md + PDF |
 | Ownership restructure 51% Sompriya Chanda (WOSB/WBE path, templates) | ✅ draft — attorney+CPA gate |
 | Sequential launch dashboard (19 tasks, ETAs, step-locking) | ✅ launch-dashboard.html + published artifact |
+
+## Rev 4 — Workstream audit + payout-flow completion (2026-07-31)
+Re-audit of the five mandated workstreams found all delivered; two gaps in "integrate
+top-up into payout flow" closed this rev:
+| Gap | Fix |
+|---|---|
+| Top-up calculator had no executor | `services/prop22Settle.js`: fixed 14-day windows anchored to launch, idempotent per runner+period, pays via Stripe `transferFunds` with idempotency keys; trigger `POST /api/admin/prop22/settle`; resolves the rolling-window counsel flag from rev 2 |
+| Tips uncounted (would over-pay top-ups) | `POST /api/orders/:id/tip` — buyer post-delivery, 100% to runner, zero platform fee, feeds settlement |
+38/38 tests. Remaining human gates unchanged: attorney sign-off, payments/accounts, DNS go-live (dashboard Tasks 1–19).

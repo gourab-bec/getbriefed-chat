@@ -78,6 +78,17 @@ export async function refund({ orderId, paymentIntentId, amountCents }) {
   return { status: r.status, refundedCents: r.amount };
 }
 
+/** Standalone transfer to a connected account (Prop 22 top-ups, stipends, adjustments). */
+export async function transferFunds({ idempotencyKey, destinationAccountId, amountCents, description }) {
+  const s = await getStripe();
+  if (!s) return { transferId: mockId('tr'), status: 'paid', amountCents };
+  const tr = await s.transfers.create(
+    { amount: amountCents, currency: 'usd', destination: destinationAccountId, description },
+    { idempotencyKey },
+  );
+  return { transferId: tr.id, status: 'paid', amountCents: tr.amount };
+}
+
 export function verifyWebhookSignature(rawBody, signature) {
   if (config.stripe.mock) return JSON.parse(rawBody.toString());
   return getStripe().then((s) => s.webhooks.constructEvent(rawBody, signature, config.stripe.webhookSecret));

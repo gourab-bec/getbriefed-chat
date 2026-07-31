@@ -33,6 +33,15 @@ adminRouter.get('/providers', (req, res) => {
   });
 });
 
+// Prop 22 settlement: close the last elapsed 14-day period and pay any top-ups.
+// Idempotent — run from cron daily (ops runbook §6) or manually after launch.
+adminRouter.post('/prop22/settle', async (req, res, next) => {
+  try {
+    const { runSettlement } = await import('../services/prop22Settle.js');
+    res.json(await runSettlement({ city: req.body?.city }));
+  } catch (err) { next(err); }
+});
+
 // Minimal weekly-metrics surface (definitions in docs/ops/04-metrics.md).
 adminRouter.get('/metrics', (req, res) => {
   const orders = [...db.orders.values()];

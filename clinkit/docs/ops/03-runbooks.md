@@ -38,6 +38,14 @@ Stripe status first. Breach: contain → scope within 72h → notify per state l
 here. Sev2 (provider breaker open > 30 min): quotes silently degrade to cached/mock — check
 `/api/admin/providers`, rotate key if 401s, else wait out upstream.
 
+## 5b. Prop 22 settlement (automated, verify weekly)
+Daily cron (or manual): `POST /api/admin/prop22/settle` (X-Admin-Token). Fixed 14-day
+windows anchored to launch day (2026-08-01); idempotent per runner+period; top-ups paid by
+Stripe transfer with idempotency keys; results in `prop22_settlements`. Weekly check: every
+settled period with `topUpCents > 0` has a `transferId`; spot-audit one runner's floor math
+against their order list. Tips recorded via `POST /api/orders/:id/tip` — a missing tip
+inflates the top-up (costs us money, never the runner), so reconcile tips vs Stripe monthly.
+
 ## 6. Weekly ops cadence
 Mon: metrics review vs targets (04) · Wed: runner insurance-expiry query + payout audit
 (sample 5 orders: receipt vs charged) · Fri: dispute backlog zero + next-week media
