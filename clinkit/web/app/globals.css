@@ -1,0 +1,54 @@
+/* Clinkit design tokens + utility styles (see docs/05-DESIGN.md) */
+:root {
+  --green: #16a34a; --green-soft: #dcfce7; --ink: #0f172a; --muted: #64748b;
+  --amber: #f59e0b; --red: #dc2626; --bg: #f8fafc; --card: #ffffff; --line: #e2e8f0;
+  --radius: 12px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.5 Inter, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.container { max-width: 640px; margin: 0 auto; padding: 16px; }
+@media (min-width: 768px) { .container.wide { max-width: 960px; } }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+.brand { font-weight: 800; font-size: 20px; text-decoration: none; color: var(--ink); }
+.brand span { color: var(--green); }
+.zipchip { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 14px; color: var(--muted); }
+
+.searchbox { display: flex; gap: 8px; margin: 8px 0 16px; }
+.searchbox input { flex: 1; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius); font-size: 16px; }
+.btn { background: var(--green); color: #fff; border: 0; border-radius: var(--radius); padding: 12px 20px; font-size: 16px; font-weight: 600; cursor: pointer; min-height: 44px; }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+.btn.block { width: 100%; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+.card.cheapest { border: 2px solid var(--green); position: relative; }
+.badge { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 2px 10px; }
+.badge.win { background: var(--green); color: #fff; }
+.badge.fast { background: #eff6ff; color: #1d4ed8; }
+.badge.surge { background: #fef3c7; color: #92400e; }
+.badge.stock { background: #fee2e2; color: #991b1b; }
+.provenance { font-size: 12px; color: var(--muted); }
+
+.storehead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.storehead h3 { margin: 0; font-size: 17px; }
+.dist { color: var(--muted); font-size: 14px; }
+.lines { margin: 8px 0; padding: 0; list-style: none; font-size: 14px; }
+.lines li { display: flex; justify-content: space-between; padding: 2px 0; }
+.totalrow { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 8px; }
+.total { font-size: 20px; font-weight: 800; }
+.feenote { font-size: 12px; color: var(--muted); }
+.savings { position: sticky; bottom: 0; background: var(--green-soft); color: #166534; text-align: center; padding: 10px; border-radius: var(--radius); font-weight: 600; margin-top: 8px; }
+
+.stepper { display: flex; gap: 4px; margin: 16px 0; }
+.step { flex: 1; height: 6px; border-radius: 3px; background: var(--line); }
+.step.done { background: var(--green); }
+.bid { display: flex; justify-content: space-between; align-items: center; }
+.chat { display: flex; gap: 8px; margin-top: 12px; }
+.chat input { flex: 1; padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius); }
+.msgs { max-height: 220px; overflow-y: auto; font-size: 14px; }
+.msgs p { background: var(--bg); border-radius: 8px; padding: 6px 10px; }
+.err { color: var(--red); font-size: 14px; }

@@ -1,0 +1,29 @@
+# Copy to .github/workflows/ci.yml at the repository root to enable CI.
+# (Kept inside clinkit/ so this feature branch stays self-contained.)
+name: clinkit-ci
+on:
+  push:
+    paths: ['clinkit/**']
+  pull_request:
+    paths: ['clinkit/**']
+jobs:
+  server-tests:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: clinkit/server } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node --test test/*.test.js   # core engines are dependency-free
+      - run: npm install --no-audit --no-fund --omit=optional
+      - run: |
+          node src/index.js & sleep 2
+          curl -sf localhost:4000/api/health
+          curl -sf -X POST localhost:4000/api/quotes -H 'Content-Type: application/json' \
+            -d '{"items":["milk"],"zip":"95376"}' | grep -q winco
+  deploy:
+    needs: server-tests
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Build image -> ECR -> ecs update-service (see docs/04-DEPLOYMENT.md)"

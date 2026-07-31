@@ -1,0 +1,67 @@
+// Order money math — integer cents throughout to avoid float drift.
+// buyer_total  = items + runnerMarkup(=pct×surge) + delivery + tax
+// platform_fee = 5% of (items + markup + delivery); runner keeps the rest + reimbursement.
+
+export const PLATFORM_FEE_PCT = 5;
+export const DEFAULT_RUNNER_MARKUP_PCT = 10;
+export const DELIVERY_BASE_CENTS = 399;
+export const DELIVERY_PER_MI_CENTS = 75; // per mile beyond FREE_MILES
+export const FREE_MILES = 3;
+
+export function deliveryFeeCents(storeToBuyerMi) {
+  const extra = Math.max(0, storeToBuyerMi - FREE_MILES);
+  return DELIVERY_BASE_CENTS + Math.round(extra * DELIVERY_PER_MI_CENTS);
+}
+
+/**
+ * @param {Object} p
+ * @param {number} p.itemsBaseCents        Σ shelf prices at chosen store
+ * @param {number} [p.runnerMarkupPct=10]  runner's bid (5–20)
+ * @param {number} [p.surgeMultiplier=1]   1.0–2.5, applies to markup only
+ * @param {number} p.storeToBuyerMi
+ * @param {number} [p.taxRate=0]           effective rate from Avalara (0.0725 etc.)
+ * @param {number} [p.taxableBaseCents]    taxable subset of items (grocery exemptions); default 0
+ */
+export function computeTotals(p) {
+  const {
+    itemsBaseCents,
+    runnerMarkupPct = DEFAULT_RUNNER_MARKUP_PCT,
+    surgeMultiplier = 1,
+    storeToBuyerMi,
+    taxRate = 0,
+    taxableBaseCents = 0,
+  } = p;
+  if (!Number.isInteger(itemsBaseCents) || itemsBaseCents < 0) {
+    throw new RangeError('itemsBaseCents must be a non-negative integer');
+  }
+  if (runnerMarkupPct < 0 || runnerMarkupPct > 30) throw new RangeError('runnerMarkupPct out of range');
+  if (surgeMultiplier < 1 || surgeMultiplier > 2.5) throw new RangeError('surgeMultiplier out of range');
+
+  const runnerMarkupCents = Math.round((itemsBaseCents * runnerMarkupPct * surgeMultiplier) / 100);
+  const delivery = deliveryFeeCents(storeToBuyerMi);
+  // Tax applies to taxable goods + delivery service where applicable (simplified: goods only here;
+  // Avalara adapter returns the authoritative figure and overrides taxCents when live).
+  const taxCents = Math.round(taxableBaseCents * taxRate);
+  const buyerTotalCents = itemsBaseCents + runnerMarkupCents + delivery + taxCents;
+
+  const feeBase = itemsBaseCents + runnerMarkupCents + delivery;
+  const platformFeeCents = Math.round((feeBase * PLATFORM_FEE_PCT) / 100);
+  // Runner is reimbursed item cost (they paid at register) + earns markup + delivery − platform fee.
+  const runnerPayoutCents = itemsBaseCents + runnerMarkupCents + delivery - platformFeeCents;
+  const runnerEarningsCents = runnerMarkupCents + delivery - platformFeeCents; // net of reimbursement
+
+  return {
+    itemsBaseCents,
+    runnerMarkupPct,
+    surgeMultiplier,
+    runnerMarkupCents,
+    deliveryFeeCents: delivery,
+    taxCents,
+    buyerTotalCents,
+    platformFeeCents,
+    runnerPayoutCents,
+    runnerEarningsCents,
+  };
+}
+
+export const fmt = (cents) => `$${(cents / 100).toFixed(2)}`;

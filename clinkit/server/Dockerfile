@@ -1,0 +1,10 @@
+# Clinkit API — single image serves API, WS, and worker (ROLE env selects mode).
+FROM node:22-alpine
+WORKDIR /app
+COPY package.json ./
+RUN npm install --omit=dev --no-audit --no-fund
+COPY src ./src
+ENV NODE_ENV=production PORT=4000
+EXPOSE 4000
+USER node
+CMD ["node", "src/index.js"]
