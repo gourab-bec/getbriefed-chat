@@ -1,0 +1,27 @@
+# Fly.io config for the API (Socket.IO needs a long-lived process — Vercel serverless
+# can't hold WebSockets, so web goes to Vercel and the API goes here).
+# From clinkit/server:  fly launch --copy-config --no-deploy && fly deploy
+# Free-tier friendly: single shared-cpu machine, auto-stop when idle.
+app = "zipnab-api"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "../server/Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "4000"
+  PROVIDERS_MOCK = "1"   # flip per-provider by setting real keys: fly secrets set KROGER_CLIENT_ID=...
+
+[http_service]
+  internal_port = 4000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[http_service.checks]]
+  interval = "30s"
+  timeout = "5s"
+  method = "GET"
+  path = "/api/health"

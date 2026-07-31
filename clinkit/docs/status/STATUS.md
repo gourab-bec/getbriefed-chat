@@ -26,3 +26,14 @@
 Hard blockers requiring the human (by design, not by gap): entity/legal filings,
 account signups + ToS acceptance, payment/banking, insurance binding, ad-account spend
 authorization, and the final go-live call.
+
+## Rev 3 — Brand, funding, standup (2026-07-31)
+| Item | State |
+|---|---|
+| Brand: **ZipNab** — zipnab.com + .co probed available (DNS NS method; confirm at registrar), 30 candidates tested | ✅ docs/brand/BRAND.md + scripts/check-domains.mjs |
+| Logo + icon SVG, taglines, message architecture | ✅ web/public/logo.svg, icon.svg |
+| Deploy path on founder's existing Vercel/getbriefed.to + Fly.io API | ✅ web/vercel.json, infra/fly.toml, docs/08-DEPLOY-VERCEL.md |
+| Credentials Q&A agent (item-by-item, resumable) | ✅ server/scripts/standup-qa.sh |
+| Chase/SBA business plan ($50k ask, honest underwriting notes) | ✅ docs/finance/business-plan-chase.md + PDF |
+| Ownership restructure 51% Sompriya Chanda (WOSB/WBE path, templates) | ✅ draft — attorney+CPA gate |
+| Sequential launch dashboard (19 tasks, ETAs, step-locking) | ✅ launch-dashboard.html + published artifact |
