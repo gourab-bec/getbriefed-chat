@@ -10,18 +10,20 @@ export const MOCK_STORES = {
   safeway: { storeChain: 'safeway', storeName: 'Safeway Tracy',             location: { lat: 37.7391, lng: -121.4436 } },
   target:  { storeChain: 'target',  storeName: 'Target Tracy',              location: { lat: 37.7622, lng: -121.4468 } },
   local:   { storeChain: 'local',   storeName: 'Tracy Corner Market',       location: { lat: 37.7450, lng: -121.4380 } },
+  costco:  { storeChain: 'costco',  storeName: 'Costco Tracy (membership)', location: { lat: 37.7280, lng: -121.4410 } },
 };
 
 // priceCents per canonical item per chain (winco intentionally cheapest on staples — matches reality).
 const CATALOG = {
-  'milk':  { name: 'Whole Milk 1 Gal',      unit: 'gal',  prices: { winco: 299, walmart: 324, kroger: 349, safeway: 389, target: 339, local: 419 } },
+  // costco entries are bulk pack sizes — absolute shelf price, so ranking stays honest.
+  'milk':  { name: 'Whole Milk 1 Gal',      unit: 'gal',  prices: { winco: 299, walmart: 324, kroger: 349, safeway: 389, target: 339, local: 419, costco: 549 } },
   'eggs':  { name: 'Large Eggs 12 ct',      unit: 'dozen', prices: { winco: 249, walmart: 262, kroger: 289, safeway: 329, target: 279, local: 350 } },
   'bread': { name: 'Wheat Sandwich Bread',  unit: 'loaf', prices: { winco: 179, walmart: 188, kroger: 219, safeway: 249, target: 199, local: 275 } },
   'butter': { name: 'Salted Butter 1 lb',   unit: 'lb',   prices: { winco: 379, walmart: 397, kroger: 429, safeway: 469, target: 419, local: 499 } },
   'bananas': { name: 'Bananas per lb',      unit: 'lb',   prices: { winco: 58,  walmart: 62,  kroger: 69,  safeway: 79,  target: 65, local: 89 } },
   'chicken breast': { name: 'Chicken Breast per lb', unit: 'lb', prices: { winco: 299, walmart: 318, kroger: 349, safeway: 399, target: 329, local: 450 } },
   'rice': { name: 'Long Grain Rice 5 lb',   unit: 'bag',  prices: { winco: 449, walmart: 472, kroger: 519, safeway: 579, target: 489, local: 625 } },
-  'toilet paper': { name: 'Bath Tissue 12 Mega', unit: 'pack', prices: { winco: 1099, walmart: 1147, kroger: 1249, safeway: 1399, target: 1189, local: 1550 } },
+  'toilet paper': { name: 'Bath Tissue 12 Mega', unit: 'pack', prices: { winco: 1099, walmart: 1147, kroger: 1249, safeway: 1399, target: 1189, local: 1550, costco: 2199 } },
 };
 
 const OUT_OF_STOCK = new Set(['kroger:eggs']); // exercise low-stock UI path

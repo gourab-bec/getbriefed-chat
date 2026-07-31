@@ -42,5 +42,33 @@ totals decide, not shelf price.
 - **surge.js** — demand/supply multiplier (1–2.5×), markup-only
 - **geo.js** — haversine, radius matching, ETA windows
 
-Real integrations activate by setting keys in `.env` and `PROVIDERS_MOCK=0` — see
-`docs/02-API-INTEGRATIONS.md`.
+## Production status (updated 2026-07-31)
+
+**What is live right now:** the full stack runs and is CI-tested (27 tests + boot smoke) in
+**mock-provider mode** — no public URL exists yet because deploying requires founder-owned
+accounts (AWS, domain registrar, Stripe). Everything is staged so each founder action is
+minutes, not days: see **`docs/DAY0-CHECKLIST.md`**.
+
+**Mock → live, per provider (no code changes):** every adapter auto-detects its key.
+Paste `KROGER_CLIENT_ID`/`SECRET` into the environment → Kroger serves real store prices on
+next boot; same for Walmart, SerpAPI, Instacart, Stripe (`STRIPE_MOCK=0`), Avalara.
+`PROVIDERS_MOCK=1` force-mocks everything (staging safety). Check state anytime:
+`curl -H "X-Admin-Token: $ADMIN_TOKEN" $HOST/api/admin/providers`. Guided key entry:
+`server/scripts/setup-keys.sh`. Signup paths per provider: `docs/07-PROVIDER-KEYS.md`.
+
+**Redeploy (once AWS secrets are in GitHub):** `git push origin main` — CI
+(`.github/workflows/ci.yml`) tests, boots, smoke-checks, then the deploy job ships the
+image. Manual equivalent: `docker build clinkit/server -t clinkit && aws ecs
+update-service --force-new-deployment`.
+
+**Hardening added:** circuit breakers + request coalescing on the price aggregator,
+structured JSON logs, admin metrics endpoint, referral engine with fraud-gated credits,
+k6 load proof for 500 VUs / 50 orders-min (`infra/load/k6-quotes.js`).
+
+## Business execution pack (docs/)
+`06-EXECUTION-PLAN.md` unit economics + honest path to scale · `legal/` licensing matrix +
+5 signature-ready drafts (**attorney review required**) + insurance checklist ·
+`marketing/` corridor playbook + creative kit · `finance/` 20-city ranking + $5k cash plan ·
+`ops/` runner training, buyer help, runbooks, metrics definitions ·
+`DAY0-CHECKLIST.md` the go-live gate. PDF export of any doc:
+`npx -y md-to-pdf docs/**/*.md` (binaries intentionally not committed).

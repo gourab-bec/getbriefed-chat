@@ -1,12 +1,12 @@
 // Instacart Developer Platform — partner catalog lookup + optional fulfillment fallback.
 // Runs in mock mode until partner approval (see docs/02-API-INTEGRATIONS.md §3).
 
-import { config } from '../config.js';
+import { config, providerLive } from '../config.js';
 import { nowIso } from './provider.js';
 import { mockOffersFor } from './fixtures.js';
 
 export async function searchOffers({ query, zip }) {
-  if (config.providersMock) return mockOffersFor(['safeway', 'target'], 'instacart', query, 0.85);
+  if (!providerLive('instacart')) return mockOffersFor(['safeway', 'target', 'costco'], 'instacart', query, 0.85);
 
   const res = await fetch('https://connect.instacart.com/idp/v1/products/search', {
     method: 'POST',

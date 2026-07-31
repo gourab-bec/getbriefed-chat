@@ -1,7 +1,7 @@
 // Kroger Products API (official, OAuth2 client-credentials) — store-level prices & stock.
 // https://developer.kroger.com
 
-import { config } from '../config.js';
+import { config, providerLive } from '../config.js';
 import { nowIso } from './provider.js';
 import { mockOffersFor } from './fixtures.js';
 
@@ -22,7 +22,7 @@ async function getToken() {
 }
 
 export async function searchOffers({ query, zip }) {
-  if (config.providersMock) return mockOffersFor(['kroger'], 'kroger', query, 1.0);
+  if (!providerLive('kroger')) return mockOffersFor(['kroger'], 'kroger', query, 1.0);
 
   const t = await getToken();
   const locRes = await fetch(

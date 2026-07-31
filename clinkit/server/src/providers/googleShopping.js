@@ -1,7 +1,7 @@
 // Google Shopping via SerpAPI (licensed SERP access) — the legal path to prices for chains
 // with no public API: WinCo, Safeway, independents. No direct retailer scraping.
 
-import { config } from '../config.js';
+import { config, providerLive } from '../config.js';
 import { nowIso } from './provider.js';
 import { mockOffersFor } from './fixtures.js';
 
@@ -14,7 +14,7 @@ const CHAIN_PATTERNS = [
 ];
 
 export async function searchOffers({ query, zip }) {
-  if (config.providersMock) return mockOffersFor(['winco', 'safeway', 'local'], 'google_shopping', query, 0.8);
+  if (!providerLive('google_shopping')) return mockOffersFor(['winco', 'safeway', 'local'], 'google_shopping', query, 0.8);
 
   const url = new URL('https://serpapi.com/search.json');
   url.searchParams.set('engine', 'google_shopping');

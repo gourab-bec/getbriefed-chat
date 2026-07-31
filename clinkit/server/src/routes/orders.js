@@ -8,6 +8,7 @@ import { computeTotals } from '../core/pricing.js';
 import { distanceMi } from '../core/geo.js';
 import { authorizePayment, capturePayment, cancelPayment } from '../services/stripe.js';
 import { emitToRunnersNear, emitToOrder } from '../ws/index.js';
+import { onFirstCompletedOrder } from './referrals.js';
 
 export const ordersRouter = Router();
 
@@ -178,6 +179,8 @@ ordersRouter.post('/:id/status', requireAuth('runner'), async (req, res, next) =
       transitionOrder(order, 'completed');
       const runner = db.runners.get(order.runnerId);
       if (runner) runner.completedOrders += 1;
+      onFirstCompletedOrder(order.buyerId, 'buyer');
+      onFirstCompletedOrder(order.runnerId, 'runner');
       emitToOrder(order.id, 'order:status', { orderId: order.id, status: 'completed' });
     }
     res.json(order);

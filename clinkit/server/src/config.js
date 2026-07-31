@@ -5,7 +5,8 @@ const env = process.env;
 export const config = {
   port: Number(env.PORT ?? 4000),
   nodeEnv: env.NODE_ENV ?? 'development',
-  providersMock: env.PROVIDERS_MOCK !== '0', // default ON; set PROVIDERS_MOCK=0 with real keys
+  providersMock: env.PROVIDERS_MOCK !== '0', // global force-mock; per-provider auto-live below
+  adminToken: env.ADMIN_TOKEN ?? '',
   jwtSecret: env.JWT_SECRET ?? 'dev-only-secret-change-me',
   databaseUrl: env.DATABASE_URL ?? '',
   redisUrl: env.REDIS_URL ?? '',
@@ -34,6 +35,22 @@ export const config = {
     mock: env.AVALARA_MOCK !== '0',
   },
 };
+
+// Per-provider auto-live: a provider goes live the moment its key lands in the environment
+// (and PROVIDERS_MOCK isn't forcing global mock). Paste key → restart/redeploy → live.
+export function providerLive(name) {
+  if (env.PROVIDERS_MOCK === '1') return false; // explicit force-mock (staging safety)
+  switch (name) {
+    case 'kroger': return Boolean(config.kroger.clientId && config.kroger.clientSecret);
+    case 'walmart': return Boolean(config.walmart.consumerId && config.walmart.privateKeyPem);
+    case 'instacart': return Boolean(config.instacartApiKey);
+    case 'briskly': return Boolean(config.brisklyApiKey && config.databaseUrl);
+    case 'google_shopping': return Boolean(config.serpapiKey);
+    case 'stripe': return !config.stripe.mock && Boolean(config.stripe.secretKey);
+    case 'avalara': return !config.avalara.mock && Boolean(config.avalara.accountId);
+    default: return false;
+  }
+}
 
 if (config.nodeEnv === 'production') {
   const missing = [];

@@ -2,7 +2,7 @@
 // https://developer.walmart.com
 
 import crypto from 'node:crypto';
-import { config } from '../config.js';
+import { config, providerLive } from '../config.js';
 import { nowIso } from './provider.js';
 import { mockOffersFor } from './fixtures.js';
 
@@ -20,7 +20,7 @@ function signedHeaders() {
 }
 
 export async function searchOffers({ query, zip }) {
-  if (config.providersMock) return mockOffersFor(['walmart', 'target'], 'walmart', query, 0.9);
+  if (!providerLive('walmart')) return mockOffersFor(['walmart', 'target'], 'walmart', query, 0.9);
   // Target-chain rows come from partner catalogs in prod; affiliate search is Walmart-only.
 
   const res = await fetch(

@@ -1,13 +1,13 @@
 // Briskly / POS feeds for opted-in local stores — event-driven inventory pushed into
 // store_offers; this adapter reads the DB cache rather than calling out per-query.
 
-import { config } from '../config.js';
+import { config, providerLive } from '../config.js';
 import { nowIso } from './provider.js';
 import { mockOffersFor } from './fixtures.js';
 import { query as dbQuery } from '../db/pool.js';
 
 export async function searchOffers({ query, zip }) {
-  if (config.providersMock) return mockOffersFor(['local'], 'briskly', query, 1.0);
+  if (!providerLive('briskly')) return mockOffersFor(['local'], 'briskly', query, 1.0);
 
   const { rows } = await dbQuery(
     `SELECT s.chain, s.name, ST_Y(s.point::geometry) AS lat, ST_X(s.point::geometry) AS lng,

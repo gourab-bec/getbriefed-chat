@@ -9,6 +9,7 @@ import * as instacart from './instacart.js';
 import * as briskly from './briskly.js';
 import * as googleShopping from './googleShopping.js';
 import { cacheGet, cacheSet } from '../redis.js';
+import { withBreaker, coalesce } from './breaker.js';
 
 const PROVIDERS = [
   ['kroger', kroger],
@@ -27,9 +28,17 @@ export async function offersForQuery({ query, zip, lat, lng, radiusMi = 10 }) {
   const cached = await cacheGet(cacheKey);
   if (cached) return cached;
 
+  // Coalesce concurrent identical lookups; breaker fails a sick provider fast so the
+  // quote never waits on it and paid-API quota isn't burned on a dead key.
+  return coalesce(cacheKey, () => fetchAndCache({ norm, cacheKey, zip, lat, lng, radiusMi }));
+}
+
+async function fetchAndCache({ norm, cacheKey, zip, lat, lng, radiusMi }) {
   const settled = await Promise.allSettled(
     PROVIDERS.map(([name, p]) =>
-      withTimeout(p.searchOffers({ query: norm, zip, lat, lng, radiusMi }), PROVIDER_TIMEOUT_MS, name),
+      withBreaker(name, () =>
+        withTimeout(p.searchOffers({ query: norm, zip, lat, lng, radiusMi }), PROVIDER_TIMEOUT_MS, name),
+      ),
     ),
   );
   const offers = [];
