@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { db } from '../db/memory.js';
 import { requireAuth } from '../middleware/auth.js';
 import { runnerLocationSet, runnerLocationRemove } from '../redis.js';
+import { periodSettlement, healthcareStipendTier, P22_RATES_2026 } from '../core/prop22.js';
 
 export const runnersRouter = Router();
 
@@ -33,6 +34,33 @@ runnersRouter.get('/feed', requireAuth('runner'), (req, res) => {
       surge: o.surgeMultiplier, createdAt: o.createdAt,
     }));
   res.json({ orders: open });
+});
+
+// Prop 22 transparency: the runner's current 14-day earning period — engaged time/miles,
+// net earnings vs the guaranteed floor, and any top-up accruing. The same settlement runs
+// in ops at period close and pays the top-up via Stripe transfer by the next period.
+runnersRouter.get('/prop22', requireAuth('runner'), (req, res) => {
+  const periodStart = Date.now() - P22_RATES_2026.periodMaxDays * 24 * 3600 * 1000;
+  const completed = [...db.orders.values()].filter(
+    (o) => o.runnerId === req.user.sub && o.status === 'completed' && o.prop22 &&
+           Date.parse(o.engagedEndAt) >= periodStart,
+  );
+  const settlement = periodSettlement({
+    orders: completed.map((o) => ({
+      engagedMs: o.prop22.engagedMs,
+      engagedMiles: o.prop22.engagedMiles,
+      netEarningsCents: o.totals.runnerEarningsCents,
+      tipsCents: o.tipsCents ?? 0,
+    })),
+    city: req.query.city, // city-specific min wage where an ordinance exceeds the state wage
+  });
+  const weeks = P22_RATES_2026.periodMaxDays / 7;
+  res.json({
+    periodDays: P22_RATES_2026.periodMaxDays,
+    rates: { engagedHourFloor: '120% of applicable minimum wage', perMileCents: P22_RATES_2026.perMileCents },
+    ...settlement,
+    healthcareStipendTier: healthcareStipendTier(settlement.engagedHours / weeks),
+  });
 });
 
 runnersRouter.get('/me', requireAuth('runner'), (req, res) => {

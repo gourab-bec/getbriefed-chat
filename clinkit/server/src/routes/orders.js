@@ -9,6 +9,7 @@ import { distanceMi } from '../core/geo.js';
 import { authorizePayment, capturePayment, cancelPayment } from '../services/stripe.js';
 import { emitToRunnersNear, emitToOrder } from '../ws/index.js';
 import { onFirstCompletedOrder } from './referrals.js';
+import { orderEngagement } from '../core/prop22.js';
 
 export const ordersRouter = Router();
 
@@ -127,6 +128,7 @@ ordersRouter.post('/bids/:bidId/accept', requireAuth('buyer'), async (req, res, 
       if (other.orderId === order.id && other.id !== bid.id && other.status === 'open') other.status = 'rejected';
     }
     order.runnerId = bid.runnerId;
+    order.engagedStartAt = new Date().toISOString(); // Prop 22: engaged time starts at accept
     transitionOrder(order, 'matched');
     emitToOrder(order.id, 'order:matched', { orderId: order.id, runnerId: bid.runnerId, etaMin: bid.etaMin });
     res.json({ order, payment: { clientSecret: payment.clientSecret } });
@@ -162,6 +164,15 @@ ordersRouter.post('/:id/status', requireAuth('runner'), async (req, res, next) =
       delivery.deliveryPhotoS3 = deliveryPhotoUrl;
       delivery.deliveredAt = new Date().toISOString();
       db.deliveries.set(order.id, delivery);
+      // Prop 22: engaged time ends at proof-of-delivery; freeze the engagement record.
+      order.engagedEndAt = delivery.deliveredAt;
+      order.prop22 = orderEngagement({
+        engagedStartAt: order.engagedStartAt,
+        engagedEndAt: order.engagedEndAt,
+        gpsTrail: delivery.gpsTrail,
+        storePoint: order.storePoint,
+        dropoffPoint: order.dropoff,
+      });
     }
 
     transitionOrder(order, status);

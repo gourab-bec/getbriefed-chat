@@ -11,11 +11,14 @@
 
 ## Training video scripts (30–90 s each, founder-shot, vertical)
 
-**V1 — How you get paid (45s).** "Three numbers on every request card: item reimbursement —
+**V1 — How you get paid (60s).** "Three numbers on every request card: item reimbursement —
 you never spend your own margin; your fee — you bid it, 5 to 20 percent, default 10; the
 delivery fee. Clinkit takes 5% of the job total, you keep the rest plus 100% of tips. Money
 lands via Stripe after the buyer's payment captures at delivery. Surge multiplies YOUR fee,
-never the shelf price — the app shows it before you accept."
+never the shelf price — the app shows it before you accept. And in California you have a
+floor under all of it: Prop 22 guarantees at least 120% of minimum wage for your engaged
+time plus 37 cents per engaged mile, checked every two weeks — if your earnings ever land
+under that line, we pay the difference automatically. Watch it live in Earnings → Prop 22."
 
 **V2 — The shop (90s).** "Accept → navigate to the store shown, not your favorite one —
 the buyer picked it for its prices. Work the checklist: Found, Substitute, or Out. NEVER

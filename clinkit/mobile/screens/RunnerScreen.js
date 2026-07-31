@@ -6,6 +6,7 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react
 import * as Location from 'expo-location';
 import { io } from 'socket.io-client';
 import { api, fmt, getToken, setToken, API_URL } from '../lib/api';
+import { startEngagedTracking, stopEngagedTracking } from '../lib/engagedLocation';
 
 const NEXT = {
   matched: ['shopping', 'Start shopping'],
@@ -48,7 +49,12 @@ export default function RunnerScreen() {
       socketRef.current?.emit('order:join', { orderId });
       socketRef.current?.on('order:matched', async ({ orderId: oid }) => {
         const o = await api(`/orders/${oid}`).catch(() => null);
-        if (o?.status === 'matched') { setActive(o); setFeed((f) => f.filter((x) => x.orderId !== oid)); }
+        if (o?.status === 'matched') {
+          setActive(o);
+          setFeed((f) => f.filter((x) => x.orderId !== oid));
+          // Prop 22: engaged time started at accept — begin GPS trail immediately.
+          startEngagedTracking(socketRef.current, oid);
+        }
       });
       Alert.alert('Bid placed', 'Waiting for the buyer to accept.');
     } catch (e) { Alert.alert('Bid failed', e.message); }
@@ -61,8 +67,11 @@ export default function RunnerScreen() {
     if (next === 'delivered') body.deliveryPhotoUrl = 's3://demo/door.jpg';
     try {
       const updated = await api(`/orders/${active.id}/status`, { method: 'POST', body });
-      if (updated.status === 'completed') { Alert.alert('Delivered 🎉', `Payout ${fmt(updated.totals.runnerPayoutCents)}`); setActive(null); }
-      else setActive(updated);
+      if (updated.status === 'completed') {
+        await stopEngagedTracking(); // engaged time ends at proof-of-delivery
+        Alert.alert('Delivered 🎉', `Payout ${fmt(updated.totals.runnerPayoutCents)}`);
+        setActive(null);
+      } else setActive(updated);
     } catch (e) { Alert.alert('Update failed', e.message); }
   }
 

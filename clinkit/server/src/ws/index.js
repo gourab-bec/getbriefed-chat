@@ -36,14 +36,19 @@ export function initWs(socketIo) {
       io.to(`order:${orderId}`).emit('chat:message', msg);
     });
 
-    // Runner GPS ping every ~5s while enroute; buyer sees live dot.
-    socket.on('gps:ping', async ({ orderId, lat, lng }) => {
+    // Runner GPS ping every ~5s while engaged; buyer sees live dot.
+    // accuracyM (meters, from the device) is stored per ping — the Prop 22 mileage
+    // calculator counts only pings ≤ MAX_GPS_ACCURACY_M; low-accuracy pings still
+    // render on the map but never reduce (or inflate) engaged miles.
+    socket.on('gps:ping', async ({ orderId, lat, lng, accuracyM }) => {
       if (role !== 'runner' || !Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return;
+      const acc = Number.isFinite(accuracyM) && accuracyM >= 0 ? Math.round(accuracyM) : null;
       await runnerLocationSet(userId, lat, lng);
       const order = orderId && db.orders.get(orderId);
       if (order && order.runnerId === userId) {
         const delivery = db.deliveries.get(orderId) ?? { orderId, gpsTrail: [] };
-        delivery.gpsTrail.push({ lat, lng, at: Date.now() });
+        delivery.gpsTrail.push({ lat, lng, at: Date.now(), accuracyM: acc });
         db.deliveries.set(orderId, delivery);
         io.to(`order:${orderId}`).emit('gps:update', { orderId, lat, lng });
       }

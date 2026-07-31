@@ -11,6 +11,10 @@ vendor).
 - [x] Circuit breakers, coalescing, structured logs, rate limits, security headers
 - [x] Referral engine (fraud-gated $7/$7 + $30 runner) wired to order completion
 - [x] Load-test script proving 500 VU / 50 orders-min target (run against staging in E)
+- [x] **Prop 22 compliance engine**: engaged time captured accept→proof-of-delivery,
+      GPS-accuracy-validated mileage (≤50 m fixes, estimate fallback), 120%-min-wage +
+      $0.37/mi floor calculator, 14-day settlement endpoint, healthcare-stipend tiers,
+      Expo high-accuracy tracking helper (2026 rates verified vs CA Treasurer)
 
 ## B. Legal identity — 👤 (~45 min + waits)
 - [ ] Confirm GetBriefed entity standing; file d/b/a "Clinkit" (county form, ~$50)

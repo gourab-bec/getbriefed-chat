@@ -1,4 +1,16 @@
-# Execution Status — 2026-07-31
+# Execution Status — 2026-07-31 (rev 2: Prop 22 workstream)
+
+## New this revision
+| Workstream | Deliverable | State |
+|---|---|---|
+| Prop 22 engine | `core/prop22.js`: engaged time (accept→proof-of-delivery), GPS-validated miles (≤50 m accuracy filter, teleport rejection, route-estimate fallback), 120%×min-wage + $0.37/mi floor, ≤14-day period settlement, healthcare stipend tiers. Rates verified against CA Treasurer 2026 adjustment. | ✅ 7 new tests, 34/34 total |
+| State machine | `engagedStartAt` stamped at bid-accept; `engagedEndAt` + engagement record frozen at delivered-with-photo; schema: orders cols + `prop22_settlements` table | ✅ E2E verified |
+| Mobile | `mobile/lib/engagedLocation.js` — Expo high-accuracy watcher (5 s/25 m) emitting accuracy-tagged pings; auto start/stop wired to RunnerScreen | ✅ syntax-checked |
+| API | `GET /api/runners/prop22` — live period standing (floor breakdown, top-up, stipend tier); ws `gps:ping` accuracy validation | ✅ |
+| Legal | `legal/07-prop22-policy.md` (ICA §4 incorporates by reference); licensing matrix updated to implemented + $0.37 | ✅ draft — attorney review |
+| PDFs | All 8 legal docs exported to `docs/legal/pdf/` (Chromium print pipeline) | ✅ |
+
+## Prior revision (unchanged)
 
 | Phase | Deliverable | State |
 |---|---|---|

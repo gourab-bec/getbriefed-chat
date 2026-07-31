@@ -83,6 +83,11 @@ CREATE TABLE orders (
   runner_id        uuid REFERENCES users(id),
   surge_multiplier numeric(3,1) NOT NULL DEFAULT 1.0,
   totals           jsonb NOT NULL,       -- computeTotals() snapshot; actuals overwrite at purchase
+  -- Prop 22 engaged-time record: engaged span is accept -> proof-of-delivery
+  engaged_start_at timestamptz,
+  engaged_end_at   timestamptz,
+  prop22           jsonb,                -- orderEngagement(): {engagedMs, engagedMiles, milesSource, gpsQuality}
+  tips_cents       int NOT NULL DEFAULT 0,
   created_at       timestamptz NOT NULL DEFAULT now(),
   updated_at       timestamptz NOT NULL DEFAULT now()
 );
@@ -168,6 +173,23 @@ CREATE TABLE payouts (
   stripe_transfer_id text,
   tax_year    int NOT NULL,              -- 1099 export bucket
   created_at  timestamptz NOT NULL DEFAULT now()
+);
+
+-- Prop 22 earning-period settlements (period <= 14 days; top-up paid by next period).
+CREATE TABLE prop22_settlements (
+  id                 uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  runner_id          uuid NOT NULL REFERENCES users(id),
+  period_start       timestamptz NOT NULL,
+  period_end         timestamptz NOT NULL,
+  engaged_ms         bigint NOT NULL,
+  engaged_miles      numeric(8,2) NOT NULL,
+  net_earnings_cents int NOT NULL,
+  floor_cents        int NOT NULL,
+  top_up_cents       int NOT NULL DEFAULT 0,
+  stipend_tier       text NOT NULL DEFAULT 'none' CHECK (stipend_tier IN ('none','half','full')),
+  stripe_transfer_id text,               -- top-up + stipend transfer
+  settled_at         timestamptz,
+  UNIQUE (runner_id, period_start)
 );
 
 CREATE TABLE audit_log (
