@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 96" role="img" aria-label="ZipNab">
+  <!-- Mark: green tile, price tag, lightning-Z -->
+  <rect x="8" y="8" width="80" height="80" rx="18" fill="#16A34A"/>
+  <!-- price tag -->
+  <path d="M30 34 L52 34 L66 48 L48 66 L30 66 Z" fill="#FFFFFF" opacity="0.28"/>
+  <circle cx="38" cy="42" r="3.5" fill="#16A34A" opacity="0.9"/>
+  <!-- lightning Z -->
+  <path d="M56 20 L34 50 L46 50 L38 76 L62 44 L50 44 Z" fill="#FFFFFF"/>
+  <!-- Wordmark -->
+  <text x="104" y="63" font-family="Inter, -apple-system, 'Segoe UI', sans-serif"
+        font-size="44" font-weight="800" letter-spacing="-1">
+    <tspan fill="#0F172A">Zip</tspan><tspan fill="#16A34A">Nab</tspan>
+  </text>
+  <text x="106" y="82" font-family="Inter, -apple-system, sans-serif" font-size="13"
+        font-weight="600" fill="#64748B" letter-spacing="0.5">NAB IT CHEAPER. GET IT FASTER.</text>
+</svg>

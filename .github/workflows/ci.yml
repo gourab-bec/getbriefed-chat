@@ -1,0 +1,51 @@
+name: clinkit-ci
+on:
+  push:
+    paths: ['clinkit/**', '.github/workflows/ci.yml']
+  pull_request:
+    paths: ['clinkit/**']
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: clinkit/server } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Unit + integration tests (dependency-free core)
+        run: node --test test/*.test.js
+      - name: Install runtime deps
+        run: npm install --no-audit --no-fund --omit=optional
+      - name: Boot smoke + quote + admin status
+        run: |
+          node src/index.js & sleep 2
+          curl -sf localhost:4000/api/health
+          curl -sf localhost:4000/api/admin/providers | grep -q '"mode":"mock"'
+          curl -sf -X POST localhost:4000/api/quotes -H 'Content-Type: application/json' \
+            -d '{"items":["milk"],"zip":"95376"}' | grep -q winco
+      - name: Dependency audit (fail on high)
+        run: npm audit --omit=dev --audit-level=high || true  # advisory until deps pinned
+
+  web-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: JSX parse check (esbuild, no install)
+        run: |
+          cd clinkit
+          for f in $(find web mobile -name '*.jsx' -o -name '*.js' | grep -v node_modules); do
+            npx -y esbuild "$f" --loader:.jsx=jsx --loader:.js=jsx --jsx=automatic --outfile=/dev/null
+          done
+
+  deploy-staging:
+    needs: [server, web-syntax]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      # Activates once AWS creds are added as repo secrets (Day-0 checklist item F).
+      - run: |
+          echo "Deploy gate: set AWS_ROLE_ARN + ECR_REPO secrets, then replace this step with:"
+          echo "  docker build clinkit/server && push ECR && aws ecs update-service --force-new-deployment"

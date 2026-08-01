@@ -1,0 +1,214 @@
+<title>ZipNab Promo Videos — Motion Previz</title>
+<style>
+  :root { --green:#22c55e; --ink:#f2f7f3; --dim:#8fa398; --stage:#0b120d; --card:#121a14; --line:#22301f; --amber:#f59e0b; }
+  body { margin:0; background:var(--stage); color:var(--ink); font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:860px; margin:0 auto; padding:28px 16px 72px; }
+  header h1 { font-size:22px; margin:0 0 4px; letter-spacing:-.3px; }
+  header h1 b { color:var(--green); }
+  header p { color:var(--dim); margin:0 0 26px; font-size:13.5px; max-width:62ch; }
+
+  .film { background:var(--card); border:1px solid var(--line); border-radius:14px; margin-bottom:34px; overflow:hidden; }
+  .film-head { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line); }
+  .film-head h2 { font-size:15px; margin:0; }
+  .film-head .len { color:var(--dim); font-size:12px; font-variant-numeric:tabular-nums; }
+  .screen { position:relative; aspect-ratio:16/9; background:#000; overflow:hidden; }
+  .scene { position:absolute; inset:0; display:grid; place-items:center; opacity:0; transition:opacity .5s ease; padding:24px; text-align:center; }
+  .scene.on { opacity:1; }
+  .super { position:absolute; left:0; right:0; bottom:10%; font-weight:800; font-size:clamp(18px,3.2vw,26px); letter-spacing:-.3px; text-shadow:0 2px 12px #000c; }
+  .vo { position:absolute; top:12px; left:0; right:0; color:var(--dim); font-size:11.5px; font-style:italic; }
+  .bar { height:4px; background:var(--line); } .bar i { display:block; height:100%; width:0; background:var(--green); }
+  .controls { display:flex; gap:10px; align-items:center; padding:10px 18px; }
+  .controls button { background:var(--green); color:#04150a; border:0; border-radius:8px; padding:8px 18px; font-weight:700; cursor:pointer; min-height:38px; }
+  .controls span { color:var(--dim); font-size:12px; }
+
+  /* scene art */
+  .receipts { display:flex; gap:36px; align-items:flex-end; }
+  .receipt { width:120px; background:#f5f5ef; color:#16211b; border-radius:4px 4px 8px 8px; padding:12px 10px 16px; font:10px/1.7 ui-monospace,monospace; transform:rotate(-3deg); box-shadow:0 12px 30px #000a; }
+  .receipt.b { transform:rotate(2.5deg); }
+  .receipt .tot { font-size:15px; font-weight:800; margin-top:6px; border-top:1px dashed #999; padding-top:5px; }
+  .receipt .tot.win { color:#15803d; outline:3px solid #22c55e88; outline-offset:2px; border-radius:3px; }
+  .phone { width:min(240px,52%); background:#f7faf8; color:#16211b; border-radius:22px; padding:14px 12px; box-shadow:0 18px 50px #000c; text-align:left; }
+  .pcard { border:2px solid #16a34a; border-radius:10px; padding:10px; background:#fff; }
+  .badge { display:inline-block; background:#16a34a; color:#fff; font-size:9.5px; font-weight:800; border-radius:99px; padding:2px 8px; }
+  .prov { color:#5b6b62; font-size:9px; margin-top:2px; }
+  .row { display:flex; justify-content:space-between; font-size:11px; margin-top:6px; }
+  .tot-big { font-size:18px; font-weight:800; }
+  .doorstep { position:absolute; inset:0; background:linear-gradient(180deg,#2a1f0e 0%,#4a3415 55%,#1c1408 100%); }
+  .sun { position:absolute; width:120px; height:120px; border-radius:50%; right:12%; top:16%; background:radial-gradient(circle,#ffd98a,#f59e0b55 60%,transparent 70%); }
+  .bag { position:absolute; left:50%; bottom:16%; translate:-50% 0; width:74px; height:92px; background:#c8a45f; border-radius:4px 4px 8px 8px; box-shadow:0 14px 30px #0009; }
+  .bag::before { content:""; position:absolute; top:-14px; left:12px; right:12px; height:16px; border:4px solid #a9853f; border-bottom:0; border-radius:10px 10px 0 0; }
+  .greens { position:absolute; top:-8px; left:16px; width:14px; height:18px; background:#22c55e; border-radius:50% 50% 0 0; box-shadow:18px -2px 0 #16a34a; }
+  .logo-end { display:grid; place-items:center; gap:10px; }
+  .tile { width:84px; height:84px; border-radius:20px; background:var(--green); display:grid; place-items:center; box-shadow:0 0 60px #22c55e44; }
+  .tile svg { width:56px; height:56px; }
+  .wordmark { font-size:30px; font-weight:800; } .wordmark b { color:var(--green); }
+  .tag { color:var(--dim); font-size:13px; letter-spacing:.4px; }
+  .payout { background:#fff; color:#16211b; border-radius:14px; padding:16px 22px; text-align:center; box-shadow:0 16px 44px #000c; }
+  .payout .amt { font-size:30px; font-weight:800; color:#15803d; }
+  .payout .lbl { font-size:10.5px; color:#5b6b62; }
+  .dash { position:absolute; inset:0; background:linear-gradient(180deg,#0a1220 0%,#16233a 60%,#0a0f18 100%); }
+  .road { position:absolute; bottom:0; left:0; right:0; height:38%; background:linear-gradient(180deg,#232a33,#14181d); transform:perspective(300px) rotateX(45deg); transform-origin:bottom; }
+  .lane { position:absolute; bottom:6%; left:50%; width:6px; height:26%; background:repeating-linear-gradient(180deg,#f5d76e 0 18px,transparent 18px 36px); translate:-50% 0; animation:lane 1s linear infinite; }
+  @keyframes lane { to { background-position-y:36px; } }
+  .floorchip { background:#0f2417; border:1px solid var(--green); color:#d7ffe6; border-radius:10px; padding:10px 16px; font-size:12.5px; }
+
+  .specs { padding:16px 18px 20px; border-top:1px solid var(--line); }
+  .specs h3 { font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--dim); margin:0 0 8px; }
+  .specs pre { background:#0d1410; border:1px solid var(--line); border-radius:8px; padding:12px; font:11.5px/1.6 ui-monospace,monospace; white-space:pre-wrap; color:#c9d8cd; margin:0 0 10px; overflow-x:auto; }
+  .specs p { font-size:12.5px; color:var(--dim); margin:8px 0 0; }
+  footer { color:var(--dim); font-size:12px; max-width:70ch; }
+  @media (prefers-reduced-motion: reduce) { .lane { animation:none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>⚡ Zip<b>Nab</b> — Promo Video Previz</h1>
+    <p>Watchable motion previews of both hero spots. Below each player: the exact photoreal
+    generation prompts (Veo / Sora / Runway) and assembly notes to render the finished 4K
+    versions — covered comfortably by a $100/day tool budget.</p>
+  </header>
+
+  <!-- FILM 1: CUSTOMER -->
+  <section class="film">
+    <div class="film-head"><h2>№1 · "The Receipt Test" — customer spot</h2><span class="len">15 s · 9:16/16:9</span></div>
+    <div class="screen" id="s1"></div>
+    <div class="bar"><i id="b1"></i></div>
+    <div class="controls"><button data-play="1">▶ Play</button><span id="t1"></span></div>
+    <div class="specs">
+      <h3>Render prompts (paste into Veo 3 / Sora / Runway Gen-4)</h3>
+      <pre>SHOT 1 (0-2.5s): Macro shot, two crumpled grocery receipts side by side on a worn kitchen
+counter, early morning window light, identical item lists visible, totals $47.83 and $39.12,
+a green marker circling the smaller total, photorealistic, shallow DOF, subtle handheld.</pre>
+      <pre>SHOT 3 (8-12s): Golden-hour suburban California doorstep, a paper grocery bag with leafy
+greens handed from a smiling delivery runner to a resident, candid smartphone-video look,
+slight camera shake, warm lens flare, no visible logos, photoreal.</pre>
+      <p>SHOT 2 (2.5–8s) is a REAL screen-recording of the app compare card (never generated —
+      truthful UI is the ad's legal backbone). VO (record human): “Same groceries. Same town.
+      Nine dollars different. ZipNab checks every store near you — a neighbor delivers the
+      cheapest one in under an hour.” End card: logo + code TRACY7.</p>
+    </div>
+  </section>
+
+  <!-- FILM 2: RUNNER -->
+  <section class="film">
+    <div class="film-head"><h2>№2 · "Your Own Boss, Guaranteed" — runner recruitment</h2><span class="len">30 s · 9:16</span></div>
+    <div class="screen" id="s2"></div>
+    <div class="bar"><i id="b2"></i></div>
+    <div class="controls"><button data-play="2">▶ Play</button><span id="t2"></span></div>
+    <div class="specs">
+      <h3>Render prompts</h3>
+      <pre>SHOT 1 (0-4s): Interior car POV at dawn, hands on steering wheel, Central Valley suburban
+street through windshield, phone mounted on dash showing a green delivery-app notification,
+cinematic anamorphic, warm low sun, photoreal.</pre>
+      <pre>SHOT 4 (22-27s): Close-up of a phone held in hand, banking-app style payout screen showing
+$11.25 deposit landing with a subtle confetti tick, thumb scrolling recent payouts,
+photoreal macro, soft focus background of a car interior.</pre>
+      <p>SHOTS 2–3 (4–22s): REAL runner footage (your first recruits, paid + release-signed,
+      “Paid partner” disclosure) — accept → shop checklist → doorstep handoff. VO: “I bid my
+      own fee. I keep every tip. And in California my pay has a floor — 120% of minimum wage
+      plus 37 cents a mile, guaranteed by law and paid automatically. First delivery pays a
+      $30 bonus.” Disclosure line on screen: “Earnings vary · zipnab.com/runner-pay”.</p>
+    </div>
+  </section>
+
+  <footer>Compliance rails baked in: the app UI is always a real recording; any AI-generated
+  person appears in product/lifestyle b-roll only, never as a testimonial; earnings claims
+  carry the disclosure link; store logos appear only inside genuine app screenshots.</footer>
+</div>
+
+<script>
+  const ZLOGO = '<svg viewBox="0 0 96 96"><path d="M36 40 L58 40 L72 54 L54 72 L36 72 Z" fill="#ffffff" opacity="0.3"/><path d="M62 18 L36 54 L50 54 L41 84 L69 46 L55 46 Z" fill="#fff"/></svg>';
+
+  const FILMS = {
+    1: [
+      { d: 2500, vo: 'VO: “Same groceries. Same town…”', html: `
+        <div class="receipts">
+          <div class="receipt">WHL MILK 1GAL 3.89<br>EGGS LG 12CT 3.29<br>WHT BREAD 2.49<br>BUTTER 1LB 4.69<br>CHKN BRST 4.87<br><div class="tot">TOTAL 47.83</div></div>
+          <div class="receipt b">WHL MILK 1GAL 2.99<br>EGGS LG 12CT 2.49<br>WHT BREAD 1.79<br>BUTTER 1LB 3.79<br>CHKN BRST 3.99<br><div class="tot win">TOTAL 39.12</div></div>
+        </div><div class="super">$9 apart. Same town.</div>` },
+      { d: 5500, vo: 'VO: “ZipNab checks every store near you…”  (real app recording)', html: `
+        <div class="phone">
+          <div style="font-weight:800;font-size:12px">⚡ Zip<span style="color:#16a34a">Nab</span> <span style="float:right;color:#5b6b62;font-weight:400;font-size:10px">95376 · Tracy</span></div>
+          <div class="pcard" style="margin-top:8px">
+            <span class="badge">🏆 CHEAPEST</span> <b style="font-size:12px">WinCo Foods · 2.1 mi</b>
+            <div class="prov">price ✓ 12m ago</div>
+            <div class="row"><span>Whole Milk 1 Gal</span><b>$2.99</b></div>
+            <div class="row"><span>Eggs Large 12 ct</span><b>$2.49</b></div>
+            <div class="row" style="border-top:1px dashed #ddd;padding-top:6px"><span class="tot-big">$12.36</span><span style="background:#16a34a;color:#fff;border-radius:8px;padding:6px 12px;font-weight:700;font-size:11px">Choose WinCo</span></div>
+          </div>
+          <div style="text-align:center;color:#166534;font-size:10px;font-weight:700;margin-top:8px">You save $1.79 (13%) ✨</div>
+        </div><div class="super" style="bottom:4%">Every store. One tap.</div>` },
+      { d: 4000, vo: 'VO: “…a neighbor delivers the cheapest one in under an hour.”', html: `
+        <div class="doorstep"></div><div class="sun"></div>
+        <div class="bag"><div class="greens"></div></div>
+        <div class="super">Under an hour. To your door.</div>` },
+      { d: 3000, vo: 'End card + CTA', html: `
+        <div class="logo-end">
+          <div class="tile">${ZLOGO}</div>
+          <div class="wordmark">Zip<b>Nab</b></div>
+          <div class="tag">NAB IT CHEAPER. GET IT FASTER.</div>
+          <div class="tag" style="color:#22c55e;font-weight:700">First order $7 off · code TRACY7</div>
+        </div>` },
+    ],
+    2: [
+      { d: 4000, vo: 'VO: “I clock in when I feel like it.”', html: `
+        <div class="dash"></div><div class="road"></div><div class="lane"></div>
+        <div class="super">No boss. No schedule.</div>` },
+      { d: 5000, vo: 'VO: “I bid my own fee. I keep every tip.”  (real runner footage)', html: `
+        <div class="phone" style="width:min(220px,48%)">
+          <div style="font-size:11px;font-weight:700">New request · WinCo · 2 items</div>
+          <div class="row"><span>Your fee</span><b>10% · $0.73</b></div>
+          <div class="row"><span>Delivery</span><b>$3.99</b></div>
+          <div class="row"><span>Est. earnings</span><b style="color:#15803d">$4.12 + tip</b></div>
+          <div style="background:#16a34a;color:#fff;border-radius:8px;text-align:center;padding:8px;font-weight:800;font-size:12px;margin-top:8px">ACCEPT</div>
+        </div>
+        <div class="super" style="bottom:5%">You set the fee. 5–20%.</div>` },
+      { d: 6000, vo: 'VO: “…my pay has a floor — guaranteed by law, paid automatically.”', html: `
+        <div class="floorchip">⚖️ <b>Prop 22 guarantee</b><br>120% of minimum wage per engaged hour<br>+ $0.37 per engaged mile — checked every 14 days.<br>Under the floor? We pay the difference. Automatically.</div>
+        <div class="super" style="bottom:6%">A floor under every week.</div>` },
+      { d: 4500, vo: 'VO: payout lands', html: `
+        <div class="payout"><div class="lbl">ZipNab payout · just now</div><div class="amt">+$11.25</div><div class="lbl">+ $3.00 tip · 100% yours</div></div>
+        <div class="super" style="bottom:6%">Paid the moment you deliver.</div>` },
+      { d: 3500, vo: 'End card + CTA', html: `
+        <div class="logo-end">
+          <div class="tile">${ZLOGO}</div>
+          <div class="wordmark">Zip<b>Nab</b></div>
+          <div class="tag" style="color:#22c55e;font-weight:700">$30 bonus on your first delivery</div>
+          <div class="tag" style="font-size:10.5px">Paid partner content · earnings vary · zipnab.com/runner-pay</div>
+        </div>` },
+    ],
+  };
+
+  function build(id) {
+    const stage = document.getElementById('s' + id);
+    FILMS[id].forEach((sc, i) => {
+      const el = document.createElement('div');
+      el.className = 'scene'; el.id = `f${id}s${i}`;
+      el.innerHTML = `<div class="vo">${sc.vo}</div>${sc.html}`;
+      stage.appendChild(el);
+    });
+    document.getElementById(`f${id}s0`).classList.add('on');
+  }
+  const timers = {};
+  function play(id) {
+    (timers[id] ?? []).forEach(clearTimeout); timers[id] = [];
+    const scenes = FILMS[id];
+    const total = scenes.reduce((s, x) => s + x.d, 0);
+    const bar = document.getElementById('b' + id);
+    bar.style.transition = 'none'; bar.style.width = '0';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      bar.style.transition = `width ${total}ms linear`; bar.style.width = '100%';
+    }));
+    let t = 0;
+    scenes.forEach((sc, i) => {
+      timers[id].push(setTimeout(() => {
+        scenes.forEach((_, j) => document.getElementById(`f${id}s${j}`).classList.toggle('on', j === i));
+        document.getElementById('t' + id).textContent = `scene ${i + 1}/${scenes.length}`;
+      }, t));
+      t += sc.d;
+    });
+    timers[id].push(setTimeout(() => { document.getElementById('t' + id).textContent = 'done — replay?'; }, t));
+  }
+  build(1); build(2);
+  document.querySelectorAll('[data-play]').forEach((b) => b.addEventListener('click', () => play(+b.dataset.play)));
+</script>

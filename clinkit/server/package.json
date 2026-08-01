@@ -1,0 +1,25 @@
+{
+  "name": "@clinkit/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "test": "node --test test/*.test.js",
+    "db:migrate": "node -e \"import('./src/db/pool.js').then(async m => { const p = await m.getPool(); const fs = await import('node:fs'); await p.query(fs.readFileSync('src/db/schema.sql','utf8')); console.log('migrated'); process.exit(0); })\""
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "optionalDependencies": {
+    "ioredis": "^5.4.1",
+    "pg": "^8.12.0",
+    "stripe": "^16.8.0",
+    "@anthropic-ai/sdk": "^0.60.0"
+  }
+}

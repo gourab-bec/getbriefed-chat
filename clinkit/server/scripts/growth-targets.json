@@ -1,0 +1,24 @@
+{
+  "planVersion": "2026-07-31 docs/marketing/03-marketing-plan.md",
+  "_aggressive": "Founder targets (PLAN=aggressive, $100/day spend, PRICING_PRESET=aggressive => contribution ~$2.60/order): M1 $10k net needs ~175 orders/day avg; M3 $30k ~430/day; M6 $100k ~1,380/day across 4+ cities. Encoded so the daily review shows tracking vs these numbers honestly — no observed marketplace has hit the M1 figure from cold start, so expect early reds and use the playbook adjustments.",
+  "aggressiveMonths": {
+    "1": { "ordersPerDay": 175, "completionRate": 0.9, "cacMaxCents": 900, "runnerUtilMin": 1.2, "referralShareMin": 0.15, "takeRateBand": [0.08, 0.18], "netProfitCentsMo": 1000000 },
+    "2": { "ordersPerDay": 280, "completionRate": 0.92, "cacMaxCents": 800, "runnerUtilMin": 1.4, "referralShareMin": 0.25, "takeRateBand": [0.08, 0.18], "netProfitCentsMo": 1800000 },
+    "3": { "ordersPerDay": 430, "completionRate": 0.92, "cacMaxCents": 700, "runnerUtilMin": 1.5, "referralShareMin": 0.3, "takeRateBand": [0.08, 0.18], "netProfitCentsMo": 3000000 },
+    "6": { "ordersPerDay": 1380, "completionRate": 0.93, "cacMaxCents": 700, "runnerUtilMin": 1.6, "referralShareMin": 0.35, "takeRateBand": [0.08, 0.18], "netProfitCentsMo": 10000000 }
+  },
+  "months": {
+    "1": { "ordersPerDay": 12, "completionRate": 0.9, "cacMaxCents": 1200, "runnerUtilMin": 1.0, "referralShareMin": 0.1, "takeRateBand": [0.045, 0.15], "netProfitCentsMo": -140000 },
+    "2": { "ordersPerDay": 30, "completionRate": 0.92, "cacMaxCents": 1000, "runnerUtilMin": 1.2, "referralShareMin": 0.2, "takeRateBand": [0.045, 0.15], "netProfitCentsMo": -60000 },
+    "3": { "ordersPerDay": 45, "completionRate": 0.92, "cacMaxCents": 800, "runnerUtilMin": 1.5, "referralShareMin": 0.25, "takeRateBand": [0.045, 0.15], "netProfitCentsMo": 0 },
+    "6": { "ordersPerDay": 260, "completionRate": 0.93, "cacMaxCents": 800, "runnerUtilMin": 1.5, "referralShareMin": 0.3, "takeRateBand": [0.045, 0.15], "netProfitCentsMo": 600000 }
+  },
+  "playbook": {
+    "ordersPerDay": { "below": "Demand problem: 3x budget on best creative (04 §5 scale rule); check runner supply first — if match-time p95 > 5 min it is a SUPPLY problem, recruit before spending on demand.", "above": "Unlock next adjacent ZIP (density rule, 01 §kill/scale)." },
+    "completionRate": { "below": "Funnel leak: check no-runner-found rate vs cancellations; if no-runner > 5%, run runner SMS blast + raise surge cap; if buyer cancels, audit quote accuracy." },
+    "cac": { "below": "Winner: shift budget from losing ad sets; clone creative to next city waitlist.", "above": "Kill creatives over $12 CAC (04 §5); shift spend to referral bonus which is capped-cost by design." },
+    "runnerUtil": { "below": "Too many runners idle: pause runner recruiting, push demand; below 1.0 runners will churn.", "above": "Above 2.5: match times will degrade — resume runner recruiting this week." },
+    "referralShare": { "below": "Push post-delivery share card; test $10/$10 weekend boost (still cheaper than paid CAC)." },
+    "takeRate": { "outside": "Fee math drift — audit pricing engine vs Stripe payouts immediately (should never happen; possible bug or refund spike)." }
+  }
+}

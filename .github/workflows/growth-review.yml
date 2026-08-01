@@ -1,0 +1,53 @@
+name: growth-review
+on:
+  schedule:
+    - cron: '0 15 * * *'   # daily 8am PT
+  workflow_dispatch: {}     # manual run anytime
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    # Arms itself automatically once the founder adds repo secrets:
+    #   METRICS_URL (e.g. https://zipnab-api.fly.dev), ADMIN_TOKEN, LAUNCH_MONTH
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Run review agent
+        id: review
+        working-directory: clinkit/server
+        continue-on-error: true
+        env:
+          METRICS_URL: ${{ secrets.METRICS_URL }}
+          ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+          LAUNCH_MONTH: ${{ secrets.LAUNCH_MONTH }}
+        run: |
+          if [ -z "$METRICS_URL" ]; then
+            echo "report=skipped" >> "$GITHUB_OUTPUT"
+            echo "METRICS_URL secret not set — review skipped (deploy the API first, docs/08)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          set +e
+          node scripts/growth-review.mjs > report.md
+          echo "offtarget=$?" >> "$GITHUB_OUTPUT"
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Open/update issue when off-target
+        if: steps.review.outputs.offtarget == '1'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('clinkit/server/report.md', 'utf8');
+            const title = '🔴 Growth review: metrics off plan';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              ...context.repo, state: 'open', labels: 'growth-review',
+            });
+            if (issues.length) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: issues[0].number, body });
+            } else {
+              await github.rest.issues.create({ ...context.repo, title, body, labels: ['growth-review'] });
+            }
