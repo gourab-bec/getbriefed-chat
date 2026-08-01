@@ -4,7 +4,7 @@
 import { Router } from 'express';
 import { db, newId, transitionOrder } from '../db/memory.js';
 import { requireAuth } from '../middleware/auth.js';
-import { computeTotals } from '../core/pricing.js';
+import { computeTotals, MIN_ORDER_CENTS, fmt } from '../core/pricing.js';
 import { distanceMi } from '../core/geo.js';
 import { authorizePayment, capturePayment, cancelPayment } from '../services/stripe.js';
 import { emitToRunnersNear, emitToOrder } from '../ws/index.js';
@@ -23,6 +23,9 @@ ordersRouter.post('/', requireAuth('buyer'), async (req, res, next) => {
     if (!option) return res.status(400).json({ error: 'no store option available' });
     if (!dropoff?.lat || !dropoff?.lng || !dropoff?.address) {
       return res.status(400).json({ error: 'dropoff {lat,lng,address} required' });
+    }
+    if (option.totals.itemsBaseCents < MIN_ORDER_CENTS) {
+      return res.status(400).json({ error: `minimum order is ${fmt(MIN_ORDER_CENTS)} of items — add a little more to your basket` });
     }
 
     const order = {

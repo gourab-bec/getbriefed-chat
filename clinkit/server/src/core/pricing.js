@@ -20,6 +20,29 @@ export const DELIVERY_PER_MI_CENTS = envInt('DELIVERY_PER_MI_CENTS', AGGRESSIVE 
 export const FREE_MILES = envInt('FREE_MILES', AGGRESSIVE ? 2 : 3);
 export const SMALL_ORDER_THRESHOLD_CENTS = envInt('SMALL_ORDER_THRESHOLD_CENTS', 2500);
 export const SMALL_ORDER_FEE_CENTS = envInt('SMALL_ORDER_FEE_CENTS', AGGRESSIVE ? 149 : 0);
+export const MIN_ORDER_CENTS = envInt('MIN_ORDER_CENTS', 1000);
+
+// Platform-take FLOOR (founder rule): the platform's fee per order is never below the
+// tier floor for the basket size. The shortfall vs the percentage fee is charged to the
+// buyer as a visible "service fee" line — the runner's payout is never reduced to fund it.
+// Small baskets get a break-even floor (~Stripe + insurance allocation) so they stay
+// servable; $25+ baskets guarantee the $5 minimum take; big baskets $6.50.
+// Override: FEE_FLOOR_TIERS="maxBaseCents:floorCents,..." (last tier catches the rest).
+function parseTiers(raw) {
+  const tiers = (raw ?? '2500:299,5000:500,999999999:650')
+    .split(',')
+    .map((t) => t.split(':').map(Number))
+    .filter(([max, floor]) => Number.isFinite(max) && Number.isFinite(floor));
+  return tiers.length ? tiers : [[999999999, 0]];
+}
+export const FEE_FLOOR_TIERS = parseTiers(process.env.FEE_FLOOR_TIERS);
+
+export function feeFloorCents(itemsBaseCents) {
+  for (const [maxBase, floor] of FEE_FLOOR_TIERS) {
+    if (itemsBaseCents < maxBase) return floor;
+  }
+  return FEE_FLOOR_TIERS[FEE_FLOOR_TIERS.length - 1][1];
+}
 
 export function deliveryFeeCents(storeToBuyerMi) {
   const extra = Math.max(0, storeToBuyerMi - FREE_MILES);
@@ -57,14 +80,19 @@ export function computeTotals(p) {
   // Tax applies to taxable goods + delivery service where applicable (simplified: goods only here;
   // Avalara adapter returns the authoritative figure and overrides taxCents when live).
   const taxCents = Math.round(taxableBaseCents * taxRate);
-  const buyerTotalCents = itemsBaseCents + runnerMarkupCents + delivery + smallOrderFeeCents + taxCents;
 
-  // Small-order fee is 100% platform revenue; the 5-10% fee applies to the rest of the fee base.
+  // Platform take = max(percentage fee + small-order fee, tier floor). The top-up needed
+  // to reach the floor is charged to the buyer as a service fee — never to the runner.
   const feeBase = itemsBaseCents + runnerMarkupCents + delivery;
-  const platformFeeCents = Math.round((feeBase * PLATFORM_FEE_PCT) / 100) + smallOrderFeeCents;
+  const pctFeeCents = Math.round((feeBase * PLATFORM_FEE_PCT) / 100);
+  const minFeeTopUpCents = Math.max(0, feeFloorCents(itemsBaseCents) - (pctFeeCents + smallOrderFeeCents));
+  const platformFeeCents = pctFeeCents + smallOrderFeeCents + minFeeTopUpCents;
+
+  const buyerTotalCents =
+    itemsBaseCents + runnerMarkupCents + delivery + smallOrderFeeCents + minFeeTopUpCents + taxCents;
   // Runner is reimbursed item cost (they paid at register) + earns markup + delivery − pct fee.
-  const runnerPayoutCents = itemsBaseCents + runnerMarkupCents + delivery - (platformFeeCents - smallOrderFeeCents);
-  const runnerEarningsCents = runnerMarkupCents + delivery - (platformFeeCents - smallOrderFeeCents);
+  const runnerPayoutCents = itemsBaseCents + runnerMarkupCents + delivery - pctFeeCents;
+  const runnerEarningsCents = runnerMarkupCents + delivery - pctFeeCents;
 
   return {
     itemsBaseCents,
@@ -73,6 +101,7 @@ export function computeTotals(p) {
     runnerMarkupCents,
     deliveryFeeCents: delivery,
     smallOrderFeeCents,
+    minFeeTopUpCents,
     taxCents,
     buyerTotalCents,
     platformFeeCents,

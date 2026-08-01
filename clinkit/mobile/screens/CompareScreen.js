@@ -55,6 +55,9 @@ export default function CompareScreen() {
             </Text>
             <Text style={s.note}>
               Items {fmt(o.totals.itemsBaseCents)} · +{o.totals.runnerMarkupPct}% · Delivery {fmt(o.totals.deliveryFeeCents)}
+              {(o.totals.minFeeTopUpCents ?? 0) + (o.totals.smallOrderFeeCents ?? 0) > 0
+                ? ` · Service ${fmt((o.totals.minFeeTopUpCents ?? 0) + (o.totals.smallOrderFeeCents ?? 0))}`
+                : ''}
             </Text>
             <View style={s.rowBetween}>
               <View>

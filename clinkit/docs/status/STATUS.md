@@ -74,3 +74,14 @@ founder-authorized.
 | Aggressive targets encoded (PLAN=aggressive in daily review): M1 $10k / M3 $30k / M6 $100k net → 175/430/1,380 orders/day, tracked honestly | ✅ |
 | Promo previz: two watchable animated hero spots + Veo/Sora/Runway render prompts, FTC rails (no AI testimonials — declined as illegal; real-runner + AI-b-roll formula instead) | ✅ artifact published |
 45/45 tests. $100/day budget note: covers Veo/Runway subs + SerpAPI + Claude support-agent tokens at launch volume.
+
+## Rev 8 — Minimum-take fee floor (2026-08-01, founder rule)
+Platform take per order = max(percentage fee + small-order fee, tier floor), floors:
+<$25 basket → $2.99 (break-even tier: ~Stripe+insurance) · $25–50 → **$5.00** · $50+ →
+$6.50; env-tunable via FEE_FLOOR_TIERS. Shortfall charged to buyer as a visible "Service
+fee" line (web + mobile) — runner payout NEVER funds the floor (verified: identical payout
+with/without top-up). $10 minimum order value enforced at order creation (MIN_ORDER_CENTS).
+Live-verified: $29.53 basket → take exactly $5.00, buyer $39.65, runner payout $34.65.
+Contribution at $30–60 AOV now ≈ $3.40–4.60/order after Stripe — promotions at ≤$2.61/order
+are unit-positive per the founder's rule. Take-rate bands widened in growth-targets.json
+(floor lifts take rate to ~10–13% on mid baskets). 46/46 tests.

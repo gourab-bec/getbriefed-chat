@@ -47,6 +47,9 @@ export default function StoreOptionCard({ option, surge, onChoose }) {
       <div className="feenote">
         Items {fmt(t.itemsBaseCents)} · Runner +{t.runnerMarkupPct}% {fmt(t.runnerMarkupCents)}
         {surge > 1 && <span className="badge surge"> ⚡ {surge}× busy</span>} · Delivery {fmt(t.deliveryFeeCents)}
+        {(t.minFeeTopUpCents > 0 || t.smallOrderFeeCents > 0) && (
+          <> · Service fee {fmt((t.minFeeTopUpCents ?? 0) + (t.smallOrderFeeCents ?? 0))}</>
+        )}
         {t.taxCents > 0 && <> · Tax {fmt(t.taxCents)}</>}
       </div>
       <div className="totalrow">
