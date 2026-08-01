@@ -53,3 +53,14 @@ slug, scheme, bundle ids app.zipnab.mobile, header), referral share URL → zipn
 Avalara company code, marketing kit, runner/buyer ops docs, and all legal drafts (d/b/a
 ZipNab) with PDFs regenerated. Repo folder `clinkit/` remains the internal code name.
 Founder's next dashboard tasks: 2 (USPTO TESS) → 3 (buy zipnab.com/.co).
+
+## Rev 6 — Marketing agents (2026-07-31)
+Planning agent → docs/marketing/03 (honest curve: month-2 ≈ break-even-minus, $100k/mo net
+lands months 18–24 with funding; tiered channel plan A $2.8k / B +$30k / C +$250k).
+Content agent → docs/marketing/04 (3 hero videos w/ Sora/Veo/Runway prompt sets, daily
+organic engine, paid structures with kill/scale rules, FTC rails — no AI testimonials).
+Review agent → REAL CODE: scripts/growth-review.mjs + growth-targets.json, daily GitHub
+Action (.github/workflows/growth-review.yml) → Actions summary + auto-issue when off-plan;
+verified against a live seeded order (correctly flagged orders/day + CAC, passed take-rate
+4.99%). Reusable prompts P1–P3 in docs/marketing/05-agents.md. Spend execution remains
+founder-authorized.
