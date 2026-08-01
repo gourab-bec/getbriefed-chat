@@ -20,7 +20,11 @@ export const DELIVERY_PER_MI_CENTS = envInt('DELIVERY_PER_MI_CENTS', AGGRESSIVE 
 export const FREE_MILES = envInt('FREE_MILES', AGGRESSIVE ? 2 : 3);
 export const SMALL_ORDER_THRESHOLD_CENTS = envInt('SMALL_ORDER_THRESHOLD_CENTS', 2500);
 export const SMALL_ORDER_FEE_CENTS = envInt('SMALL_ORDER_FEE_CENTS', AGGRESSIVE ? 149 : 0);
-export const MIN_ORDER_CENTS = envInt('MIN_ORDER_CENTS', 1000);
+export const MIN_ORDER_CENTS = envInt('MIN_ORDER_CENTS', 2000);
+// Bundle rebate: when a runner accepts a second order while one is active (two orders,
+// one trip), the buyer gets this off the DELIVERY fee at accept — never off the platform
+// $5, and the runner still nets more per trip (2× earnings for ~1.3× time).
+export const BUNDLE_REBATE_CENTS = envInt('BUNDLE_REBATE_CENTS', 200);
 
 // Platform-take FLOOR (founder rule): the platform's fee — its recovery of marketing, IT,
 // and promotion costs — is max($5.00, percentage fee). Flat $5 minimum on every order,

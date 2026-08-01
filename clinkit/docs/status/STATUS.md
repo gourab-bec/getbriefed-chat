@@ -92,3 +92,11 @@ of order). Default FEE_FLOOR_TIERS now flat 500¢; percentage takes over at ~$42
 (aggressive 10%) / ~$92+ (default 5%). Verified curve (aggressive): $10→$5.00, $35→$5.00,
 $50→$6.25, $80→$9.61, $150→$17.45; money identity holds at every tier; runner payout
 never funds the fee. 46/46 tests.
+
+## Rev 10 — $20 min order + runtime bundle rebate (2026-08-01, founder rules)
+MIN_ORDER_CENTS default 2000 ($20 basket → ~$31 buyer total: fees ≈ $11 = $5 platform +
+$6 runner earnings + surge/tip, matching the founder's target split). Bundle rebate: when
+a runner accepts a 2nd order with a trip active, $2 (BUNDLE_REBATE_CENTS) comes off the
+delivery fee at accept — settled via the existing auth-high/capture-lower Stripe flow;
+platform $5 never touched; runner still nets more per trip. Live-verified: gate rejects
+sub-$20; bundled order2 $37.65 vs $39.65, take $5.00 unchanged, identity holds. 46/46.

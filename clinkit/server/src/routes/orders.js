@@ -4,7 +4,7 @@
 import { Router } from 'express';
 import { db, newId, transitionOrder } from '../db/memory.js';
 import { requireAuth } from '../middleware/auth.js';
-import { computeTotals, MIN_ORDER_CENTS, fmt } from '../core/pricing.js';
+import { computeTotals, MIN_ORDER_CENTS, BUNDLE_REBATE_CENTS, fmt } from '../core/pricing.js';
 import { distanceMi } from '../core/geo.js';
 import { authorizePayment, capturePayment, cancelPayment } from '../services/stripe.js';
 import { emitToRunnersNear, emitToOrder } from '../ws/index.js';
@@ -115,6 +115,22 @@ ordersRouter.post('/bids/:bidId/accept', requireAuth('buyer'), async (req, res, 
     });
     totals.taxCents = order.totals.taxCents;
     totals.buyerTotalCents += order.totals.taxCents;
+
+    // Bundle rebate: runner already has an active trip → two orders, one journey.
+    // Discount comes off the DELIVERY fee (buyer + runner sides equally), never the
+    // platform take; Stripe manual capture settles the lower amount at delivery.
+    const hasActiveTrip = [...db.orders.values()].some(
+      (o) => o.runnerId === bid.runnerId && o.id !== order.id &&
+             ['matched', 'shopping', 'purchased', 'enroute'].includes(o.status),
+    );
+    if (hasActiveTrip && BUNDLE_REBATE_CENTS > 0) {
+      const rebate = Math.min(BUNDLE_REBATE_CENTS, totals.deliveryFeeCents);
+      totals.bundleRebateCents = rebate;
+      totals.deliveryFeeCents -= rebate;
+      totals.buyerTotalCents -= rebate;
+      totals.runnerPayoutCents -= rebate;
+      totals.runnerEarningsCents -= rebate;
+    }
     order.totals = totals;
 
     const runner = db.runners.get(bid.runnerId);
