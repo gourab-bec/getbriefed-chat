@@ -26,7 +26,7 @@ export default function RunnerScreen() {
       if (!getToken()) {
         const r = await api('/auth/register', {
           method: 'POST',
-          body: { email: `r+${Date.now()}@clinkit.app`, password: 'password123', fullName: 'Mobile Runner', role: 'runner' },
+          body: { email: `r+${Date.now()}@zipnab.app`, password: 'password123', fullName: 'Mobile Runner', role: 'runner' },
         });
         setToken(r.token);
       }

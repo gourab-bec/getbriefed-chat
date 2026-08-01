@@ -46,3 +46,10 @@ top-up into payout flow" closed this rev:
 | Top-up calculator had no executor | `services/prop22Settle.js`: fixed 14-day windows anchored to launch, idempotent per runner+period, pays via Stripe `transferFunds` with idempotency keys; trigger `POST /api/admin/prop22/settle`; resolves the rolling-window counsel flag from rev 2 |
 | Tips uncounted (would over-pay top-ups) | `POST /api/orders/:id/tip` — buyer post-delivery, 100% to runner, zero platform fee, feeds settlement |
 38/38 tests. Remaining human gates unchanged: attorney sign-off, payments/accounts, DNS go-live (dashboard Tasks 1–19).
+
+## Rev 5 — Brand APPROVED: ZipNab (2026-07-31, founder decision)
+Swept through: web UI (title, header, hero tagline, manifest, token key), mobile (app name,
+slug, scheme, bundle ids app.zipnab.mobile, header), referral share URL → zipnab.com/r/,
+Avalara company code, marketing kit, runner/buyer ops docs, and all legal drafts (d/b/a
+ZipNab) with PDFs regenerated. Repo folder `clinkit/` remains the internal code name.
+Founder's next dashboard tasks: 2 (USPTO TESS) → 3 (buy zipnab.com/.co).

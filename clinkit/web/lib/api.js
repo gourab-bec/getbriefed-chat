@@ -3,9 +3,9 @@
 export const fmt = (cents) => `$${(cents / 100).toFixed(2)}`;
 
 export function getToken() {
-  return typeof window !== 'undefined' ? localStorage.getItem('clinkit_token') : null;
+  return typeof window !== 'undefined' ? localStorage.getItem('zipnab_token') : null;
 }
-export function setToken(t) { localStorage.setItem('clinkit_token', t); }
+export function setToken(t) { localStorage.setItem('zipnab_token', t); }
 
 export async function api(path, { method = 'GET', body } = {}) {
   const res = await fetch(`/api${path}`, {

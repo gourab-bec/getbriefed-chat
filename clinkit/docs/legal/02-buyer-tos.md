@@ -1,10 +1,10 @@
 # CLINKIT BUYER TERMS OF SERVICE
 
-> **DRAFT — ATTORNEY REVIEW REQUIRED.** GetBriefed Inc/LLC d/b/a Clinkit. Last updated {{Date}}.
+> **DRAFT — ATTORNEY REVIEW REQUIRED.** GetBriefed Inc/LLC d/b/a ZipNab. Last updated {{Date}}.
 
-**1. What Clinkit is.** Clinkit is a technology marketplace that (a) surfaces estimated
+**1. What ZipNab is.** ZipNab is a technology marketplace that (a) surfaces estimated
 retail prices at stores near you, and (b) connects you with independent contractor Runners
-who purchase and deliver goods you request. **Clinkit is not a retailer, does not hold
+who purchase and deliver goods you request. **ZipNab is not a retailer, does not hold
 inventory, and does not employ Runners.** The retail sale occurs between you and the store;
 Runner services are provided by the Runner.
 
@@ -15,12 +15,12 @@ accept, times any disclosed surge multiplier) + delivery fee + applicable taxes.
 shelf prices at checkout differ from estimates by more than $2.00 in total, you will be
 asked to approve before the Runner completes purchase. Final receipt replaces estimates.
 
-**3. Taxes.** Where marketplace-facilitator laws apply, Clinkit collects and remits sales
-tax on taxable items; taxes are itemized at checkout and passed through — Clinkit does not
+**3. Taxes.** Where marketplace-facilitator laws apply, ZipNab collects and remits sales
+tax on taxable items; taxes are itemized at checkout and passed through — ZipNab does not
 profit from tax.
 
 **4. Payments.** Processed by Stripe; your card is authorized when you accept a Runner bid
-and captured on delivery. Clinkit never stores card numbers.
+and captured on delivery. ZipNab never stores card numbers.
 
 **5. Substitutions, missing items, refunds.** You control substitutions in-app. Items the
 Runner marks out-of-stock are removed from your total. Report problems within 48 hours;
@@ -46,7 +46,7 @@ not allow these limits; they apply to the fullest extent permitted.
 (AAA Consumer Rules, San Joaquin County CA or videoconference), with a 30-day opt-out by
 written notice, small-claims excepted. **Class actions are waived** to the extent permitted.
 
-**10. Privacy.** The Clinkit Privacy Policy (03-privacy-policy.md) is incorporated,
+**10. Privacy.** The ZipNab Privacy Policy (03-privacy-policy.md) is incorporated,
 including your California (CCPA/CPRA) and, where applicable, GDPR-grade rights: access,
 export, correction, deletion. We do not sell your personal information.
 

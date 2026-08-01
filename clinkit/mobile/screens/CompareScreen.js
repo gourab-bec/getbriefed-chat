@@ -23,7 +23,7 @@ export default function CompareScreen() {
       if (!getToken()) {
         const r = await api('/auth/register', {
           method: 'POST',
-          body: { email: `m+${Date.now()}@clinkit.app`, password: 'password123', fullName: 'Mobile Buyer', zip },
+          body: { email: `m+${Date.now()}@zipnab.app`, password: 'password123', fullName: 'Mobile Buyer', zip },
         });
         setToken(r.token);
       }

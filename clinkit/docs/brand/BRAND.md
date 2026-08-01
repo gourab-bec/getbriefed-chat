@@ -1,4 +1,8 @@
-# Brand: ZipNab
+# Brand: ZipNab — ✅ APPROVED by founder 2026-07-31
+
+> Approved in-session; brand swept through web/mobile UI, marketing kit, ops docs, and
+> legal drafts (d/b/a ZipNab) the same day. Next founder actions: USPTO TESS knock-out
+> (dashboard Task 2) → buy zipnab.com + zipnab.co (Task 3).
 
 ## The name
 **ZipNab** = *zip* (speed, under an hour) + *nab* (grab the deal). Six letters, one thought,

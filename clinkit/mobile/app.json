@@ -1,21 +1,21 @@
 {
   "expo": {
-    "name": "Clinkit",
-    "slug": "clinkit",
+    "name": "ZipNab",
+    "slug": "zipnab",
     "version": "0.1.0",
     "orientation": "portrait",
-    "scheme": "clinkit",
+    "scheme": "zipnab",
     "userInterfaceStyle": "light",
     "splash": { "backgroundColor": "#16a34a" },
     "ios": {
-      "bundleIdentifier": "app.clinkit.mobile",
+      "bundleIdentifier": "app.zipnab.mobile",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Clinkit matches you with nearby stores and shows live Runner location.",
+        "NSLocationWhenInUseUsageDescription": "ZipNab matches you with nearby stores and shows live Runner location.",
         "NSCameraUsageDescription": "Runners photograph receipts and deliveries as proof."
       }
     },
     "android": {
-      "package": "app.clinkit.mobile",
+      "package": "app.zipnab.mobile",
       "permissions": ["ACCESS_FINE_LOCATION", "CAMERA"]
     },
     "plugins": ["expo-location", "expo-image-picker"]

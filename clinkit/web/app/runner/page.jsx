@@ -21,7 +21,7 @@ export default function RunnerPage() {
 
   async function ensureRunner() {
     if (!getToken()) {
-      const email = `runner+${Math.random().toString(36).slice(2, 8)}@clinkit.app`;
+      const email = `runner+${Math.random().toString(36).slice(2, 8)}@zipnab.app`;
       const r = await api('/auth/register', { method: 'POST', body: { email, password: 'password123', fullName: 'Demo Runner', role: 'runner' } });
       setToken(r.token);
     }

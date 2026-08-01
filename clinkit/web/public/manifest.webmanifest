@@ -1,6 +1,6 @@
 {
-  "name": "Clinkit",
-  "short_name": "Clinkit",
+  "name": "ZipNab",
+  "short_name": "ZipNab",
   "description": "Hyperlocal delivery at the lowest store price near you.",
   "start_url": "/",
   "display": "standalone",

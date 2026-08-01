@@ -1,6 +1,6 @@
 # CLINKIT PRIVACY POLICY
 
-> **DRAFT — ATTORNEY REVIEW REQUIRED.** GetBriefed Inc/LLC d/b/a Clinkit. Effective {{Date}}.
+> **DRAFT — ATTORNEY REVIEW REQUIRED.** GetBriefed Inc/LLC d/b/a ZipNab. Effective {{Date}}.
 
 **1. What we collect.** Account data (name, email, phone, password hash); addresses and
 geolocation (buyer drop-off; Runner GPS while online/delivering only); order contents;
@@ -42,5 +42,5 @@ Breach notification per applicable law without undue delay.
 **9. Changes.** Material changes announced in-app 14 days ahead; archive of prior versions
 available on request.
 
-**Contact.** GetBriefed Inc/LLC d/b/a Clinkit — privacy@getbriefed.example (activate real
+**Contact.** GetBriefed Inc/LLC d/b/a ZipNab — privacy@getbriefed.example (activate real
 inbox before launch; also update §11 of the Buyer ToS).

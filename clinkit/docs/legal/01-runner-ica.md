@@ -1,10 +1,10 @@
 # RUNNER INDEPENDENT CONTRACTOR AGREEMENT
 
 > **DRAFT — ATTORNEY REVIEW REQUIRED BEFORE USE.** Prepared for GetBriefed Inc/LLC d/b/a
-> Clinkit ("Platform"). Upload to DocuSign/Dropbox Sign with fields: {{RunnerName}},
+> ZipNab ("Platform"). Upload to DocuSign/Dropbox Sign with fields: {{RunnerName}},
 > {{Date}}, {{Signature}}. Governing law: California; arbitration seat: San Joaquin County.
 
-This Agreement is between GetBriefed Inc/LLC d/b/a Clinkit and {{RunnerName}} ("Runner"),
+This Agreement is between GetBriefed Inc/LLC d/b/a ZipNab and {{RunnerName}} ("Runner"),
 effective {{Date}}.
 
 **1. Relationship.** Runner is an independent contractor operating an independent delivery
@@ -73,7 +73,7 @@ excepted.
 notice (continued use = acceptance; arbitration changes require re-consent); severability;
 California law without conflict rules.
 
-| GetBriefed Inc/LLC d/b/a Clinkit | Runner |
+| GetBriefed Inc/LLC d/b/a ZipNab | Runner |
 |---|---|
 | By: _______________ | {{Signature}} |
 | Title: _______________ | Name: {{RunnerName}} |

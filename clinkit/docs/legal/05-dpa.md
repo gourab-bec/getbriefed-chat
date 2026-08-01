@@ -2,9 +2,9 @@
 
 > **DRAFT — ATTORNEY REVIEW REQUIRED.** Binds GetBriefed Inc/LLC internal operations and
 > is attached to processor agreements (Stripe, AWS, Avalara, Checkr, Twilio already carry
-> their own DPAs — this addendum governs Clinkit-side obligations and any future vendors).
+> their own DPAs — this addendum governs ZipNab-side obligations and any future vendors).
 
-**1. Roles.** Clinkit is the "business" (CCPA) / "controller" (GDPR-style) for buyer and
+**1. Roles.** ZipNab is the "business" (CCPA) / "controller" (GDPR-style) for buyer and
 Runner personal information; vendors are service providers/processors bound to process PI
 only per documented instructions, with confidentiality, security, sub-processor flow-down,
 and deletion-on-termination clauses. No vendor may sell or share PI or combine it across

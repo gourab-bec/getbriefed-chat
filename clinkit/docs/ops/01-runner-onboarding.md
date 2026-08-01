@@ -13,7 +13,7 @@
 
 **V1 — How you get paid (60s).** "Three numbers on every request card: item reimbursement —
 you never spend your own margin; your fee — you bid it, 5 to 20 percent, default 10; the
-delivery fee. Clinkit takes 5% of the job total, you keep the rest plus 100% of tips. Money
+delivery fee. ZipNab takes 5% of the job total, you keep the rest plus 100% of tips. Money
 lands via Stripe after the buyer's payment captures at delivery. Surge multiplies YOUR fee,
 never the shelf price — the app shows it before you accept. And in California you have a
 floor under all of it: Prop 22 guarantees at least 120% of minimum wage for your engaged
@@ -33,7 +33,7 @@ false-non-delivery claims. Tap Delivered. That's the moment payment captures and
 payout is locked."
 
 **V4 — Staying independent (30s).** "You choose when to log on, which jobs to take, what
-to bid. You can run other apps at the same time. Nobody at Clinkit schedules you or can
+to bid. You can run other apps at the same time. Nobody at ZipNab schedules you or can
 require you to accept anything. That independence is real and it's the deal."
 
 ## First-5-orders support

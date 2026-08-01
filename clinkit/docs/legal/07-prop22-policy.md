@@ -1,4 +1,4 @@
-# Clinkit Prop 22 Compliance Policy (published; incorporated into Runner ICA §4)
+# ZipNab Prop 22 Compliance Policy (published; incorporated into Runner ICA §4)
 
 > **DRAFT — ATTORNEY REVIEW REQUIRED.** Implements Cal. Bus. & Prof. Code §7449 et seq.
 > for Runners in California. Rates verified 2026-07-31 against the CA Treasurer's annual
@@ -27,7 +27,7 @@ they are expense pass-throughs) — against:
 
 Statewide 2026 minimum wage is $16.90/hr → an engaged-hour floor of **$20.28**; where a
 city ordinance sets a higher minimum wage, the higher wage applies. If your net earnings
-are below the floor, Clinkit pays the difference **no later than the next earning period**
+are below the floor, ZipNab pays the difference **no later than the next earning period**
 via your Stripe account. Your live standing is always visible: app → Earnings → "Prop 22
 guarantee" (`GET /api/runners/prop22`).
 

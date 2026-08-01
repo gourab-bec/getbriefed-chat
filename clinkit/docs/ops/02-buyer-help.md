@@ -1,6 +1,6 @@
 # Buyer Help Center (seed articles)
 
-### How does Clinkit find the cheapest store?
+### How does ZipNab find the cheapest store?
 We pull prices from store APIs and licensed data sources for every store within your
 radius, then rank by your **true total** — shelf prices + your Runner's fee + delivery +
 tax — not the shelf price alone. Every price shows its source and how fresh it is ("✓ 12m
@@ -34,4 +34,4 @@ for your $7 share code).
 
 ### Your data
 Export or delete everything: Profile → Privacy. GPS trails auto-delete after 30 days,
-chat after 90. We never sell your data. Full policy: clinkit.co/privacy.
+chat after 90. We never sell your data. Full policy: zipnab.com/privacy.

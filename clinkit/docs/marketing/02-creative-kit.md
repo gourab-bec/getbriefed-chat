@@ -6,13 +6,13 @@ All assets templated: swap {CITY}, {STORE_A}, {PRICE_A}, {STORE_B}, {PRICE_B} pe
 
 **1. "The receipt test" (hero ad)**
 > [Hook, 2s: two receipts side by side] "Same milk. Same day. $2.99 here, $3.89 there —
-> SAME TOWN." [Screen-record Clinkit compare: WinCo card with 🏆 CHEAPEST badge] "Clinkit
+> SAME TOWN." [Screen-record ZipNab compare: WinCo card with 🏆 CHEAPEST badge] "ZipNab
 > checks every store within 10 miles and a neighbor delivers the cheap one in under an
 > hour." [CTA] "First order? Code TRACY7 takes $7 off. Link in bio."
 
 **2. "Runner POV"**
 > [Dash-cam/cart POV] "I made $214 Saturday just buying groceries for neighbors. I bid my
-> own fee, no boss, no schedule. Clinkit pays the moment I deliver." [Show payout screen
+> own fee, no boss, no schedule. ZipNab pays the moment I deliver." [Show payout screen
 > $11.25] CTA: "Runners get $30 on their first delivery this month."
 
 **3. "The lazy tax"**
@@ -40,7 +40,7 @@ All assets templated: swap {CITY}, {STORE_A}, {PRICE_A}, {STORE_B}, {PRICE_B} pe
 
 ## Landing page copy (drop into web/app/page.jsx hero when launching)
 - H1: **Every store's price. One hour to your door.**
-- Sub: Clinkit compares live prices at {STORE_A}, {STORE_B}, Walmart, Target and every
+- Sub: ZipNab compares live prices at {STORE_A}, {STORE_B}, Walmart, Target and every
   store within 10 miles — then a neighbor delivers the cheapest basket. You see the shelf
   price, the runner's fee, and the delivery cost before you tap. No warehouse. No markup
   games. No membership.

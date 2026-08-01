@@ -10,7 +10,7 @@ export default function App() {
     <SafeAreaView style={s.root}>
       <StatusBar barStyle="dark-content" />
       <View style={s.header}>
-        <Text style={s.brand}>⚡ Clink<Text style={{ color: '#16a34a' }}>it</Text></Text>
+        <Text style={s.brand}>⚡ Zip<Text style={{ color: "#16a34a" }}>Nab</Text></Text>
       </View>
       {tab === 'buy' ? <CompareScreen /> : <RunnerScreen />}
       <View style={s.tabs}>

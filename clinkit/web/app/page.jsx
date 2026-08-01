@@ -27,7 +27,7 @@ export default function Home() {
     try {
       if (!getToken()) {
         // Demo auto-login (real app: auth screen with phone OTP)
-        const email = `demo+${Math.random().toString(36).slice(2, 8)}@clinkit.app`;
+        const email = `demo+${Math.random().toString(36).slice(2, 8)}@zipnab.app`;
         const r = await api('/auth/register', { method: 'POST', body: { email, password: 'password123', fullName: 'Demo Buyer', zip } });
         setToken(r.token);
       }
@@ -45,7 +45,10 @@ export default function Home() {
 
   return (
     <main>
-      <h1 style={{ fontSize: 26 }}>What do you need? We find it cheapest nearby.</h1>
+      <h1 style={{ fontSize: 26 }}>Nab it cheaper. Get it faster.</h1>
+      <p className="feenote" style={{ marginTop: -6 }}>
+        Every store's price within 10 miles — a neighbor delivers the cheapest basket in under an hour.
+      </p>
       <div className="searchbox">
         <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="milk, eggs, bread…"
                onKeyDown={(e) => e.key === 'Enter' && compare()} aria-label="Items to compare" />

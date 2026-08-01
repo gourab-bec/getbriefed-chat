@@ -46,7 +46,7 @@ referralsRouter.get('/me', requireAuth(), (req, res) => {
   const credits = db.credits.get(req.user.sub) ?? [];
   res.json({
     code,
-    shareUrl: `https://clinkit.co/r/${code}`,
+    shareUrl: `https://zipnab.com/r/${code}`,
     pending: r.uses.filter((u) => u.status === 'pending').length,
     completed: r.uses.filter((u) => u.status === 'completed').length,
     creditBalanceCents: credits.filter((c) => c.status === 'granted').reduce((s, c) => s + c.cents, 0),
