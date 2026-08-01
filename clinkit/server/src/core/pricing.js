@@ -22,14 +22,14 @@ export const SMALL_ORDER_THRESHOLD_CENTS = envInt('SMALL_ORDER_THRESHOLD_CENTS',
 export const SMALL_ORDER_FEE_CENTS = envInt('SMALL_ORDER_FEE_CENTS', AGGRESSIVE ? 149 : 0);
 export const MIN_ORDER_CENTS = envInt('MIN_ORDER_CENTS', 1000);
 
-// Platform-take FLOOR (founder rule): the platform's fee per order is never below the
-// tier floor for the basket size. The shortfall vs the percentage fee is charged to the
-// buyer as a visible "service fee" line — the runner's payout is never reduced to fund it.
-// Small baskets get a break-even floor (~Stripe + insurance allocation) so they stay
-// servable; $25+ baskets guarantee the $5 minimum take; big baskets $6.50.
-// Override: FEE_FLOOR_TIERS="maxBaseCents:floorCents,..." (last tier catches the rest).
+// Platform-take FLOOR (founder rule): the platform's fee — its recovery of marketing, IT,
+// and promotion costs — is max($5.00, percentage fee). Flat $5 minimum on every order,
+// growing with order value once the percentage exceeds it (at 10% aggressive that's
+// ~$42+ baskets; at 5% default ~$92+). Charged to the buyer as a visible "service fee"
+// line — the runner's payout is never reduced to fund it.
+// Override tiers: FEE_FLOOR_TIERS="maxBaseCents:floorCents,..." (last tier catches rest).
 function parseTiers(raw) {
-  const tiers = (raw ?? '2500:299,5000:500,999999999:650')
+  const tiers = (raw ?? '999999999:500')
     .split(',')
     .map((t) => t.split(':').map(Number))
     .filter(([max, floor]) => Number.isFinite(max) && Number.isFinite(floor));

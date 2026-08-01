@@ -85,3 +85,10 @@ Live-verified: $29.53 basket → take exactly $5.00, buyer $39.65, runner payout
 Contribution at $30–60 AOV now ≈ $3.40–4.60/order after Stripe — promotions at ≤$2.61/order
 are unit-positive per the founder's rule. Take-rate bands widened in growth-targets.json
 (floor lifts take rate to ~10–13% on mid baskets). 46/46 tests.
+
+## Rev 9 — Service fee: flat $5 minimum, % growth (2026-08-01, founder rule)
+Reframed as platform cost recovery (marketing/IT/promotion): take = max($5.00, platform %
+of order). Default FEE_FLOOR_TIERS now flat 500¢; percentage takes over at ~$42+ baskets
+(aggressive 10%) / ~$92+ (default 5%). Verified curve (aggressive): $10→$5.00, $35→$5.00,
+$50→$6.25, $80→$9.61, $150→$17.45; money identity holds at every tier; runner payout
+never funds the fee. 46/46 tests.

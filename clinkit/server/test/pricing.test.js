@@ -7,24 +7,24 @@ test('base case: $7.27 basket, 10% markup, no surge, 2.1 mi, grocery-exempt tax'
   assert.equal(t.runnerMarkupCents, 73);            // 10% of 727 → 72.7 → 73
   assert.equal(t.deliveryFeeCents, 399);            // within 3 free miles
   assert.equal(t.taxCents, 0);
-  // Small basket (<$25): platform take floors at $2.99 (break-even tier); pct fee is 60¢,
-  // so a $2.39 service fee tops it up — charged to the buyer, never the runner.
-  assert.equal(t.minFeeTopUpCents, 299 - 60);
-  assert.equal(t.platformFeeCents, 299);
-  assert.equal(t.buyerTotalCents, 727 + 73 + 399 + 239); // $14.38
+  // Flat $5 platform-cost-recovery minimum: pct fee is 60¢, so a $4.40 service fee tops
+  // it up — charged to the buyer, never the runner.
+  assert.equal(t.minFeeTopUpCents, 500 - 60);
+  assert.equal(t.platformFeeCents, 500);
+  assert.equal(t.buyerTotalCents, 727 + 73 + 399 + 440); // $16.39
   assert.equal(t.runnerPayoutCents, 727 + 73 + 399 - 60); // runner unaffected by the floor
   assert.equal(t.runnerEarningsCents, 73 + 399 - 60);
 });
 
-test('fee floor tiers: $5 minimum take on $25+ baskets, $6.50 on $50+, pct wins when higher', () => {
+test('take = max($5, pct of order): flat $5 minimum, percentage takes over on big baskets', () => {
   const mid = computeTotals({ itemsBaseCents: 3500, storeToBuyerMi: 2 }); // $35 basket
-  assert.equal(mid.platformFeeCents, 500);           // pct fee 212¢ → topped up to the $5 floor
+  assert.equal(mid.platformFeeCents, 500);           // pct fee 212¢ → topped up to the $5 min
   assert.ok(mid.minFeeTopUpCents > 0);
   const big = computeTotals({ itemsBaseCents: 6000, storeToBuyerMi: 2 }); // $60 basket
-  assert.equal(big.platformFeeCents, 650);           // $6.50 tier
+  assert.equal(big.platformFeeCents, 500);           // pct 350¢ still under the min at 5%
   const huge = computeTotals({ itemsBaseCents: 20000, storeToBuyerMi: 2 }); // $200 basket
-  assert.equal(huge.minFeeTopUpCents, 0);            // pct fee 1120¢ > floor — no top-up
-  assert.ok(huge.platformFeeCents >= 650);
+  assert.equal(huge.minFeeTopUpCents, 0);            // pct fee 1120¢ > $5 — grows with value
+  assert.ok(huge.platformFeeCents > 1000);
   // Floor never comes out of the runner: payout identical with or without top-up.
   assert.equal(mid.runnerPayoutCents, 3500 + mid.runnerMarkupCents + mid.deliveryFeeCents - Math.round((3500 + mid.runnerMarkupCents + mid.deliveryFeeCents) * 0.05));
 });
@@ -48,8 +48,8 @@ test('delivery fee adds $0.75/mi beyond 3 miles', () => {
 test('taxable lines (non-grocery) add tax to buyer total only', () => {
   const t = computeTotals({ itemsBaseCents: 2000, storeToBuyerMi: 1, taxRate: 0.0825, taxableBaseCents: 2000 });
   assert.equal(t.taxCents, 165);
-  // pct fee 130¢ floors up to 299¢ (small-basket tier); tax rides on top, never fee'd.
-  assert.equal(t.platformFeeCents, 299);
+  // pct fee 130¢ floors up to the flat $5 minimum; tax rides on top, never fee'd.
+  assert.equal(t.platformFeeCents, 500);
   assert.equal(t.buyerTotalCents, 2000 + 200 + 399 + t.minFeeTopUpCents + 165);
 });
 
