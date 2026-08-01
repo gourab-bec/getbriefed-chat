@@ -20,8 +20,11 @@ price drift.
 ## 3. Surge activation (mostly automatic — this is the manual override)
 Auto: `core/surge.js` from open-requests/online-runners per area. Manual override cases:
 weather event or store closure → set cap 1.5× (config) + push "high demand" banner; runner
-supply collapse (< 3 online in live ZIP) → trigger runner SMS blast ("$X guaranteed next 2
-hours" from bonus budget) BEFORE letting surge exceed 2×. Never market during surge caps.
+supply collapse (< 3 online in live ZIP) → runner SMS blast offering a per-order boost
+("+$3 per completed delivery for the next 2 hours" from bonus budget) BEFORE letting surge
+exceed 2×. **Founder rule: never pay for availability or idle time — every incentive
+dollar, signup bonuses included, releases only against a completed order** (matches the
+pay-per-order model and Prop 22's engaged-time-only floor). Never market during surge caps.
 
 ## 4. City expansion checklist (clone-a-city, target: 2 weeks)
 1. Legal: state marketplace-facilitator registration + city license (legal/00 matrix row)
