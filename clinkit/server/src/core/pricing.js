@@ -2,11 +2,24 @@
 // buyer_total  = items + runnerMarkup(=pct×surge) + delivery + tax
 // platform_fee = 5% of (items + markup + delivery); runner keeps the rest + reimbursement.
 
-export const PLATFORM_FEE_PCT = 5;
-export const DEFAULT_RUNNER_MARKUP_PCT = 10;
-export const DELIVERY_BASE_CENTS = 399;
-export const DELIVERY_PER_MI_CENTS = 75; // per mile beyond FREE_MILES
-export const FREE_MILES = 3;
+// Fee levers are env-tunable so the founder can raise product cost without a code change.
+// Defaults = launch plan. PRICING_PRESET=aggressive applies the month-1 profit-push preset
+// (platform 10%, delivery $5.49 + $1.00/mi>2, runner default 12%, $1.49 small-order fee):
+// on a $35 CA basket the buyer total moves ~$43 -> ~$50 — still below Instacart's typical
+// marked-up total for the same basket, because the shelf price stays untouched.
+const AGGRESSIVE = process.env.PRICING_PRESET === 'aggressive';
+const envInt = (name, def) => {
+  const v = Number.parseInt(process.env[name] ?? '', 10);
+  return Number.isFinite(v) ? v : def;
+};
+
+export const PLATFORM_FEE_PCT = envInt('PLATFORM_FEE_PCT', AGGRESSIVE ? 10 : 5);
+export const DEFAULT_RUNNER_MARKUP_PCT = envInt('RUNNER_MARKUP_PCT', AGGRESSIVE ? 12 : 10);
+export const DELIVERY_BASE_CENTS = envInt('DELIVERY_BASE_CENTS', AGGRESSIVE ? 549 : 399);
+export const DELIVERY_PER_MI_CENTS = envInt('DELIVERY_PER_MI_CENTS', AGGRESSIVE ? 100 : 75);
+export const FREE_MILES = envInt('FREE_MILES', AGGRESSIVE ? 2 : 3);
+export const SMALL_ORDER_THRESHOLD_CENTS = envInt('SMALL_ORDER_THRESHOLD_CENTS', 2500);
+export const SMALL_ORDER_FEE_CENTS = envInt('SMALL_ORDER_FEE_CENTS', AGGRESSIVE ? 149 : 0);
 
 export function deliveryFeeCents(storeToBuyerMi) {
   const extra = Math.max(0, storeToBuyerMi - FREE_MILES);
@@ -39,16 +52,19 @@ export function computeTotals(p) {
 
   const runnerMarkupCents = Math.round((itemsBaseCents * runnerMarkupPct * surgeMultiplier) / 100);
   const delivery = deliveryFeeCents(storeToBuyerMi);
+  const smallOrderFeeCents =
+    itemsBaseCents < SMALL_ORDER_THRESHOLD_CENTS ? SMALL_ORDER_FEE_CENTS : 0;
   // Tax applies to taxable goods + delivery service where applicable (simplified: goods only here;
   // Avalara adapter returns the authoritative figure and overrides taxCents when live).
   const taxCents = Math.round(taxableBaseCents * taxRate);
-  const buyerTotalCents = itemsBaseCents + runnerMarkupCents + delivery + taxCents;
+  const buyerTotalCents = itemsBaseCents + runnerMarkupCents + delivery + smallOrderFeeCents + taxCents;
 
+  // Small-order fee is 100% platform revenue; the 5-10% fee applies to the rest of the fee base.
   const feeBase = itemsBaseCents + runnerMarkupCents + delivery;
-  const platformFeeCents = Math.round((feeBase * PLATFORM_FEE_PCT) / 100);
-  // Runner is reimbursed item cost (they paid at register) + earns markup + delivery − platform fee.
-  const runnerPayoutCents = itemsBaseCents + runnerMarkupCents + delivery - platformFeeCents;
-  const runnerEarningsCents = runnerMarkupCents + delivery - platformFeeCents; // net of reimbursement
+  const platformFeeCents = Math.round((feeBase * PLATFORM_FEE_PCT) / 100) + smallOrderFeeCents;
+  // Runner is reimbursed item cost (they paid at register) + earns markup + delivery − pct fee.
+  const runnerPayoutCents = itemsBaseCents + runnerMarkupCents + delivery - (platformFeeCents - smallOrderFeeCents);
+  const runnerEarningsCents = runnerMarkupCents + delivery - (platformFeeCents - smallOrderFeeCents);
 
   return {
     itemsBaseCents,
@@ -56,6 +72,7 @@ export function computeTotals(p) {
     surgeMultiplier,
     runnerMarkupCents,
     deliveryFeeCents: delivery,
+    smallOrderFeeCents,
     taxCents,
     buyerTotalCents,
     platformFeeCents,

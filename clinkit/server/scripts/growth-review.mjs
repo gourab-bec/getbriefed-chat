@@ -9,7 +9,10 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const { months, playbook, planVersion } = JSON.parse(readFileSync(join(here, 'growth-targets.json'), 'utf8'));
+const targets = JSON.parse(readFileSync(join(here, 'growth-targets.json'), 'utf8'));
+const { playbook, planVersion } = targets;
+// PLAN=aggressive tracks the founder's $10k/$30k/$100k net curve; default = base plan.
+const months = process.env.PLAN === 'aggressive' ? targets.aggressiveMonths : targets.months;
 
 const BASE = process.env.METRICS_URL ?? 'http://localhost:4000';
 const month = String(process.env.LAUNCH_MONTH ?? '1');

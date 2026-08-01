@@ -25,11 +25,14 @@ const PROVIDER_NAMES = ['kroger', 'walmart', 'instacart', 'briskly', 'google_sho
 adminRouter.get('/providers', (req, res) => {
   res.json({
     forceMock: process.env.PROVIDERS_MOCK === '1',
-    providers: PROVIDER_NAMES.map((name) => ({
-      name,
-      mode: providerLive(name) ? 'live' : 'mock',
-      breaker: breakerState(name),
-    })),
+    providers: [
+      ...PROVIDER_NAMES.map((name) => ({
+        name,
+        mode: providerLive(name) ? 'live' : 'mock',
+        breaker: breakerState(name),
+      })),
+      { name: 'support_ai', mode: process.env.ANTHROPIC_API_KEY ? 'live (claude)' : 'policy-router', breaker: 'n/a' },
+    ],
   });
 });
 
@@ -40,6 +43,23 @@ adminRouter.post('/prop22/settle', async (req, res, next) => {
     const { runSettlement } = await import('../services/prop22Settle.js');
     res.json(await runSettlement({ city: req.body?.city }));
   } catch (err) { next(err); }
+});
+
+// Escalation console: tickets the AI support agent handed to humans.
+adminRouter.get('/tickets', (req, res) => {
+  const tickets = [...(db.tickets?.values() ?? [])].sort(
+    (a, b) => (a.severity === 'high' ? -1 : 1) - (b.severity === 'high' ? -1 : 1) || b.createdAt.localeCompare(a.createdAt),
+  );
+  res.json({ open: tickets.filter((t) => t.status === 'open'), resolved: tickets.filter((t) => t.status !== 'open').length });
+});
+
+adminRouter.post('/tickets/:id/resolve', (req, res) => {
+  const ticket = db.tickets?.get(req.params.id);
+  if (!ticket) return res.status(404).json({ error: 'ticket not found' });
+  ticket.status = 'resolved';
+  ticket.resolution = String(req.body?.resolution ?? 'resolved').slice(0, 1000);
+  ticket.resolvedAt = new Date().toISOString();
+  res.json(ticket);
 });
 
 // Minimal weekly-metrics surface (definitions in docs/ops/04-metrics.md).

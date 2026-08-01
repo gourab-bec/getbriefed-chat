@@ -5,6 +5,7 @@ import { quotesRouter } from './routes/quotes.js';
 import { ordersRouter } from './routes/orders.js';
 import { runnersRouter } from './routes/runners.js';
 import { adminRouter } from './routes/admin.js';
+import { supportRouter } from './routes/support.js';
 import { referralsRouter } from './routes/referrals.js';
 import { verifyWebhookSignature } from './services/stripe.js';
 import { incrWindow } from './redis.js';
@@ -63,6 +64,7 @@ export function createApp() {
   app.use('/api/orders', ordersRouter);
   app.use('/api/runners', runnersRouter);
   app.use('/api/referrals', referralsRouter);
+  app.use('/api/support', supportRouter);
   app.use('/api/admin', adminRouter);
 
   app.use((req, res) => res.status(404).json({ error: 'not found' }));

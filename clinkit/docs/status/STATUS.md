@@ -64,3 +64,13 @@ Action (.github/workflows/growth-review.yml) → Actions summary + auto-issue wh
 verified against a live seeded order (correctly flagged orders/day + CAC, passed take-rate
 4.99%). Reusable prompts P1–P3 in docs/marketing/05-agents.md. Spend execution remains
 founder-authorized.
+
+## Rev 7 — AI support org, fee levers, promo previz (2026-07-31)
+| Item | State |
+|---|---|
+| AI support agent (buyers + runners, equal competence): Claude-powered when ANTHROPIC_API_KEY set (claude-opus-5, prompt-cached policy system, refusal-handled), deterministic policy router otherwise; grounded in the user's REAL orders + Prop 22 standing | ✅ services/supportAgent.js + POST /api/support/chat |
+| Escalation handling: safety/legal/fraud topics ticket FIRST (never AI-adjudicated), refund reviews, human-requested; admin console GET/resolve /api/admin/tickets | ✅ 7 tests |
+| Fee levers ("increase product cost"): env-tunable platform fee/delivery/markup + small-order fee; PRICING_PRESET=aggressive → ~$2.60 contribution at $35 AOV, money identity verified | ✅ |
+| Aggressive targets encoded (PLAN=aggressive in daily review): M1 $10k / M3 $30k / M6 $100k net → 175/430/1,380 orders/day, tracked honestly | ✅ |
+| Promo previz: two watchable animated hero spots + Veo/Sora/Runway render prompts, FTC rails (no AI testimonials — declined as illegal; real-runner + AI-b-roll formula instead) | ✅ artifact published |
+45/45 tests. $100/day budget note: covers Veo/Runway subs + SerpAPI + Claude support-agent tokens at launch volume.
